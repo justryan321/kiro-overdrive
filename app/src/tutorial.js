@@ -112,5 +112,5 @@ export function startTour() {
 export function initTour() {
   const b = document.getElementById('tour-btn');
   if (b) b.onclick = startTour;
-  if (!store()) setTimeout(startTour, 600); // let the first render finish
+  setTimeout(startTour, 600); // always show on load; let the first render finish
 }

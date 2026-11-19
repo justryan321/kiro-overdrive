@@ -3,7 +3,7 @@
     "id": "starter",
     "name": "Starter",
     "level": 1,
-    "tagline": "The essentials for your first week in Kiro.",
+    "tagline": "Essential packages",
     "audience": "Everyone. Install this first, in every repo you work in.",
     "extends": null,
     "items": [
@@ -40,7 +40,7 @@
     "id": "intermediate",
     "name": "Intermediate",
     "level": 2,
-    "tagline": "For people shipping SQL and working Jira tickets every week.",
+    "tagline": "Tools for more control, recommended for developers",
     "audience": "Once you're comfortable in Kiro and own tickets end to end.",
     "extends": "starter",
     "items": [

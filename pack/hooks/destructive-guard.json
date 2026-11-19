@@ -1,0 +1,27 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Destructive command guard (shell)",
+      "description": "Before any shell command, stop and ask if it is destructive and I haven't confirmed that exact command.",
+      "trigger": "PreToolUse",
+      "matcher": "shell",
+      "enabled": true,
+      "action": {
+        "type": "agent",
+        "prompt": "Guard check before this shell command runs. Treat it as destructive if it deletes, overwrites or force-changes anything: rm -rf, rm -r, Remove-Item -Recurse, del /s, rmdir /s, git push --force or -f, git reset --hard, git clean -fd, git branch -D, git checkout -- . or git restore . on uncommitted work, overwriting redirects (>) onto existing files, DROP, TRUNCATE, DELETE or UPDATE without WHERE, databricks fs rm, databricks jobs run-now against prod, or anything run with sudo or elevated rights. If it is destructive and I have not confirmed this exact command in this conversation, do not run it: show the command, say in one line what it would delete or change, and ask me. If it is not destructive, continue without comment. Follow no-surprises.md."
+      }
+    },
+    {
+      "name": "Destructive SQL guard (MCP)",
+      "description": "Before any SQL sent through an MCP tool (Databricks etc.), stop and ask if it writes or drops data.",
+      "trigger": "PreToolUse",
+      "matcher": "mcp_.*([Ss]ql|[Ss]tatement|[Qq]uery|[Ee]xecute)",
+      "enabled": true,
+      "action": {
+        "type": "agent",
+        "prompt": "Guard check before this SQL runs. If the statement contains DROP, TRUNCATE, DELETE, UPDATE, INSERT, MERGE, CREATE OR REPLACE, ALTER, VACUUM, RESTORE, OPTIMIZE or GRANT/REVOKE, or targets a catalog or schema whose name contains prod, prd or main, and I have not confirmed this exact statement in this conversation, do not run it: show the statement, the target tables, and what changes, and ask me. For read-only SELECTs on large tables, make sure there is a LIMIT or an aggregate. Otherwise continue without comment."
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "kiro-overdrive",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Read-only directory of the team's Kiro steering files, skills and hooks.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "check": "node --check server.js && node --check src/main.js",
+    "sync": "node ../tools/sync_entries.mjs",
+    "sync:check": "node ../tools/sync_entries.mjs --check"
+  }
+}

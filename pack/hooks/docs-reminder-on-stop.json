@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Docs and contract reminder",
+      "description": "When the agent finishes, flag docs, contracts or changelog entries that the changes made stale.",
+      "trigger": "Stop",
+      "enabled": true,
+      "action": {
+        "type": "agent",
+        "prompt": "Final check, once per set of changes. If you already ran this check for the current changes, or you changed no files in this turn, do nothing and say nothing. Otherwise, if your changes touched any of: table schemas or DDL, function or module interfaces, job or pipeline configs, CLI commands, environment variables, or tests that define behavior, then list in one or two lines which docs might now be stale (README, docs/, data contracts, project-brain.md, specs) and ask whether to update them. If a branch was merged in this session, also suggest #changelog. Do not edit anything in this step."
+      }
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kiro Overdrive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0F766E" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l8-4 8 4v12l-8 4-8-4z"></path><path d="M4 6l8 4 8-4M12 10v12"></path></svg>
+      Kiro Overdrive
+    </div>
+    <div class="meta">
+      <span class="count" id="count-line"></span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <main class="browse">
+    <div class="intro">
+      <h1>Team directory</h1>
+      <p>Steering, skills and hooks the data team uses in Kiro, grouped by what they help you do. Pick an entry to see what it does, how to install it, and how to test it.</p>
+      <p class="legend" id="legend"></p>
+    </div>
+    <div id="banner" class="banner" hidden></div>
+    <section class="packages" id="packages" aria-labelledby="pk-h" hidden></section>
+    <div class="toolbar">
+      <label class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <span class="sr-only">Search the directory</span>
+        <input id="search" type="search" placeholder="Search by name, tag or file" autocomplete="off">
+      </label>
+      <div class="seg" id="filters" role="group" aria-label="Filter by purpose"></div>
+      <label class="check" for="rec-only"><input type="checkbox" id="rec-only"><span class="star"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.8l2.85 5.78 6.38.93-4.62 4.5 1.09 6.35L12 17.36l-5.7 3 1.09-6.35-4.62-4.5 6.38-.93z"></path></svg></span>Recommended only</label>
+    </div>
+    <div class="groups" id="grid" aria-label="Entries"></div>
+  </main>
+  <aside class="drawer" id="drawer" aria-label="Selected entry" aria-live="polite"></aside>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

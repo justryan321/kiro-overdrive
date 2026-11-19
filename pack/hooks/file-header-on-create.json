@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Standard header on new code files",
+      "description": "When the agent creates a Python, SQL or notebook file, add the team header block.",
+      "trigger": "PostFileCreate",
+      "matcher": "\\.(py|sql|ipynb)$",
+      "enabled": true,
+      "action": {
+        "type": "agent",
+        "prompt": "A new code file was just created. If it has no header block yet, add one at the top with: Purpose (one line), Owner (git config user.name), Created (today, YYYY-MM-DD), Inputs (tables or files read), Outputs (tables or files written), and Ticket (if known from the branch name or conversation, otherwise leave blank). Use the file's comment style: '# ' for .py, '-- ' for .sql, and a first markdown cell for .ipynb. For Databricks notebooks saved as .py, keep '# Databricks notebook source' as the very first line and put the header right after it. Skip __init__.py, test fixtures, generated files and files under .kiro/. Do not change anything else."
+      }
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+import { initTour } from './tutorial.js';
+
 const CATEGORIES = [
   { id: 'steering', label: 'Steering', plural: 'Steering' },
   { id: 'skill', label: 'Skill', plural: 'Skills' },
@@ -672,4 +674,4 @@ async function loadData(banner) {
 
 /* ---------- data ---------- */
 render();
-loadData($('banner'));
+loadData($('banner')).then(initTour);

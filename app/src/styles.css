@@ -216,4 +216,17 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--line-st
   .fact:last-child { border-bottom: 0 !important; }
   .topbar .meta .count { display: none; }
 }
-@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+/* tutorial overlay */
+.tour { position: fixed; inset: 0; z-index: 100; }
+.tour-spot { position: fixed; border-radius: 10px; box-shadow: 0 0 0 9999px rgba(28, 25, 23, 0.62); border: 2px solid var(--accent-ring); pointer-events: none; transition: top .2s, left .2s, width .2s, height .2s; }
+.tour-spot.none { top: 50%; left: 50%; width: 0; height: 0; border: 0; }
+.tour-pop { position: fixed; width: min(360px, calc(100vw - 16px)); background: var(--surface); border-radius: 10px; padding: 18px 18px 14px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; gap: 8px; }
+.tour-pop h2 { margin: 0; font-size: 16px; }
+.tour-pop p { margin: 0; color: var(--ink-2); }
+.tour-step { font-size: 12px; color: var(--muted); }
+.tour-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; }
+.tour-nav { display: flex; gap: 8px; }
+.tour-skip { background: none; border: 0; padding: 4px; color: var(--muted); cursor: pointer; text-decoration: underline; }
+.tour-skip:hover { color: var(--ink); }
+.tour button[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) { .toast, .tour-spot { transition: none; } }

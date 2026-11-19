@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Brain capture",
+      "description": "After each spec task, append durable learnings to this repo's decisions log.",
+      "trigger": "PostTaskExecution",
+      "enabled": true,
+      "action": {
+        "type": "agent",
+        "prompt": "Review the spec task that just finished. If it produced a durable learning (a decision and why, a convention to repeat, a gotcha to avoid, or a definition of a term or metric), append one line per learning under '## Entries' in .kiro/steering/decisions-log.md, using the format '- YYYY-MM-DD | type | note (because ...) | source' with the spec/task name as source. Most tasks produce nothing worth logging: if so, write nothing. Skip debugging play-by-play, anything already in code or comments, and anything still undecided. Append only: do not edit, reorder or delete existing lines, and do not touch any other file, especially global steering."
+      }
+    }
+  ]
+}

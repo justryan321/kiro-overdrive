@@ -49,10 +49,6 @@
         "why": "Catches fan-out joins, NULL traps and date bugs before wrong numbers ship, on demand and on every save."
       },
       {
-        "id": "ticket-to-spec",
-        "why": "Turns a Jira issue into a Kiro spec traced to its acceptance criteria, and asks about gaps first."
-      },
-      {
         "id": "second-brain-kit",
         "why": "Kiro remembers your projects, conventions and decisions across sessions, so you stop re-explaining the same things."
       }

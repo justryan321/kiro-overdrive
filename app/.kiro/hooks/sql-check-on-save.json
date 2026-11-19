@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "SQL quick check on save",
+      "description": "When the agent saves a .sql file, run a fast correctness check and report only real problems.",
+      "trigger": "PostFileSave",
+      "matcher": "\\.sql$",
+      "enabled": true,
+      "action": {
+        "type": "agent",
+        "prompt": "Quick check of the SQL file just saved. Look only for high-severity issues from the sql-review checklist: joins that fan out (non-unique keys on one side), non-deterministic ROW_NUMBER or FIRST_VALUE ordering, NOT IN against a nullable subquery, WHERE filters on outer-joined columns, BETWEEN on timestamps, missing filters on partition columns of large tables, and SELECT * before a join. If you find any, list them in at most five one-line bullets with line numbers and suggest running #sql-review. If there are none, say nothing at all. Do not edit the file."
+      }
+    }
+  ]
+}

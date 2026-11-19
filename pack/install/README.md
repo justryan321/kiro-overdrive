@@ -9,9 +9,9 @@ Packages are cumulative: each one includes everything in the one before it.
 | Package | Adds | Total |
 |---|---|---|
 | `starter` | Guardian (`no-surprises.md` + `destructive-guard.json`), `onboard-me.md`, `file-header-on-create.json`, `standup.md`, Changelog and Docs (`changelog.md` + `docs-reminder-on-stop.json`) | 5 items, 7 files |
-| `intermediate` | SQL Review (`sql-review.md` + `sql-check-on-save.json`), `ticket-to-spec.md`, Second Brain | 8 items |
-| `advanced` | `output-formats.md`, `steering-doctor.md`, `handoff.md`, `metric-align.md`, `future-purge.md` | 13 items |
-| `all` (default) | Advanced + personal files: `explain-mode.md`, `claude-code-style.md`, `codex-style.md` | 16 items |
+| `intermediate` | SQL Review (`sql-review.md` + `sql-check-on-save.json`), Second Brain | 7 items |
+| `advanced` | `output-formats.md`, `steering-doctor.md`, `handoff.md`, `metric-align.md`, `future-purge.md` | 12 items |
+| `all` (default) | Advanced + personal files: `explain-mode.md`, `claude-code-style.md`, `codex-style.md` | 15 items |
 
 The Kiro Overdrive directory app shows the same packages with a reason for each item, and an install command for each package.
 

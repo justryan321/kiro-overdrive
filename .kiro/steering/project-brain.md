@@ -21,6 +21,12 @@ The team's Kiro setup: a pack of steering files, skills and hooks, plus a direct
 - `docs/`: rollout guide for teammates
 - `tools/`: `sync_entries.mjs`
 
+## Databricks app
+- App name: `kiro-overdrive` (used by `databricks apps` CLI commands)
+- App ID: `5d8be03b-5bbe-48a6-991a-a77cf70f4402`
+- Deploys from Git: `https://skx.ghe.com/skechers-dataeng/kiro-overdrive`, branch `main`
+- Git source code path: `app` (no leading slash; `/app` fails the sparse checkout)
+
 ## Topic files (load with #name)
 | When working on… | Load |
 |---|---|

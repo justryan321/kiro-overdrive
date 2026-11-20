@@ -1,4 +1,6 @@
 import { initTour } from './tutorial.js';
+import { createTracker } from './track.js';
+import { bump, byPopular, copiesLabel, copiesOf, hasMetrics } from './popular.js';
 
 const CATEGORIES = [
   { id: 'steering', label: 'Steering', plural: 'Steering' },
@@ -23,7 +25,7 @@ const purposeOf = e => PURPOSES.find(p => p.id === e.purpose) || OTHER_PURPOSE;
 
 const store = { get(k, d) { try { return localStorage.getItem(k) || d; } catch { return d; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
 const guessOS = /mac|iphone|ipad/i.test((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent) ? 'mac' : 'win';
-const state = { os: store.get('ko-os', guessOS), scope: store.get('ko-scope', 'project'), method: store.get('ko-method', 'terminal'), tab: 'overview', entries: [], filter: 'all', q: '', selected: location.hash.slice(1) || null, closed: false, loaded: false };
+const state = { os: store.get('ko-os', guessOS), scope: store.get('ko-scope', 'project'), method: store.get('ko-method', 'terminal'), tab: 'overview', entries: [], filter: 'all', q: '', selected: location.hash.slice(1) || null, closed: false, loaded: false, metrics: null, sort: store.get('ko-sort', 'rec') };
 const $ = id => document.getElementById(id);
 const el = (tag, props = {}, kids = []) => { const n = document.createElement(tag); Object.assign(n, props); for (const k of [].concat(kids)) if (k != null && k !== false) n.append(k); return n; };
 const svgIcon = d => { const ns = 'http://www.w3.org/2000/svg'; const s = document.createElementNS(ns, 'svg'); s.setAttribute('width', '14'); s.setAttribute('height', '14'); s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('fill', 'none'); s.setAttribute('stroke', 'currentColor'); s.setAttribute('stroke-width', '2.2'); s.setAttribute('aria-hidden', 'true'); const p = document.createElementNS(ns, 'path'); p.setAttribute('d', d); s.append(p); return s; };
@@ -32,7 +34,38 @@ const starIcon = (size = 14) => { const ns = 'http://www.w3.org/2000/svg'; const
 const byRec = (a, b) => (b.recommended ? 1 : 0) - (a.recommended ? 1 : 0);
 
 function toast(text) { const t = $('toast'); t.textContent = text; t.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('show'), 1800); }
-async function copyText(text, ok) { try { await navigator.clipboard.writeText(text); toast(ok); } catch { toast('Copy was blocked. Select the text and copy it.'); } }
+// trk is [kind, id] ('entries' or 'packages'). It is recorded only after the copy worked,
+// and a tracking failure never changes what the user sees.
+async function copyText(text, ok, trk) {
+  try { await navigator.clipboard.writeText(text); } catch { toast('Copy was blocked. Select the text and copy it.'); return; }
+  toast(ok);
+  if (trk) track(trk[0], trk[1]);
+}
+
+/* ---------- copy counts (popular sort and badges) ---------- */
+async function fetchMetrics() {
+  try { const r = await fetch('/api/metrics'); return r.ok ? await r.json() : null; } catch { return null; }
+}
+const track = createTracker({
+  onTracked: async (kind, id) => {
+    if (state.metrics) bump(state.metrics, kind, id);
+    else { state.metrics = await fetchMetrics(); }
+    renderSort(); // cards refresh on the next render, so the list doesn't reshuffle under the cursor
+  },
+});
+const popularOn = () => state.sort === 'popular' && hasMetrics(state.metrics);
+function renderSort() {
+  const box = $('sort'); if (!box) return;
+  box.replaceChildren();
+  box.hidden = !hasMetrics(state.metrics);
+  if (box.hidden) return;
+  [['rec', 'Recommended'], ['popular', 'Most popular']].forEach(([id, label]) => {
+    const b = el('button', { type: 'button', textContent: label });
+    b.setAttribute('aria-pressed', String((id === 'popular') === popularOn()));
+    b.onclick = () => { state.sort = id; store.set('ko-sort', id); renderSort(); renderGrid(); };
+    box.append(b);
+  });
+}
 
 function visible() {
   const q = state.q.trim().toLowerCase();
@@ -67,7 +100,7 @@ function renderGrid() {
     grid.append(el('div', { className: 'empty', textContent: state.entries.length ? 'Nothing matches that search or filter.' : 'The directory is empty. Add the first entry.' }));
     return;
   }
-  const groups = [...PURPOSES, OTHER_PURPOSE].map(p => ({ p, items: items.filter(e => purposeOf(e).id === p.id).sort(byRec) })).filter(g => g.items.length);
+  const groups = [...PURPOSES, OTHER_PURPOSE].map(p => ({ p, items: items.filter(e => purposeOf(e).id === p.id).sort(popularOn() ? byPopular(state.metrics) : byRec) })).filter(g => g.items.length);
   for (const g of groups) {
     const cards = el('div', { className: 'grid' });
     g.items.forEach(e => cards.append(cardFor(e)));
@@ -85,8 +118,11 @@ function cardFor(e) {
   const title = el('span', { className: 'card-title' + (isHashName(e.title) ? ' mono' : ''), textContent: e.title || 'Untitled' });
   const name = el('span', { className: 'card-name' }, [e.recommended ? el('span', { className: 'star', title: 'Recommended' }, [starIcon(15)]) : null, title]);
   if (e.recommended) card.setAttribute('aria-label', (e.title || 'Untitled') + ', recommended');
+  const copies = copiesOf(state.metrics, 'entries', e.id);
   card.append(
-    el('div', { className: 'card-head' }, [name, el('span', { className: 'card-type', textContent: catOf(e.category).label })]),
+    el('div', { className: 'card-head' }, [name, el('span', { className: 'card-side' }, [
+      copies ? el('span', { className: 'copies', textContent: copiesLabel(copies) }) : null,
+      el('span', { className: 'card-type', textContent: catOf(e.category).label })])]),
     el('p', { textContent: e.summary || '' }),
     (e.tags || []).length ? el('div', { className: 'tags' }, (e.tags || []).slice(0, 3).map(t => el('span', { className: 'tag', textContent: t }))) : null
   );
@@ -136,9 +172,9 @@ function renderDrawer() {
   const actions = el('div', { className: 'actions' });
   if (!isKit(e)) {
     const cf = el('button', { type: 'button', className: 'btn primary sm', textContent: 'Copy file' });
-    cf.onclick = () => copyText(e.content || '', 'File copied');
+    cf.onclick = () => copyText(e.content || '', 'File copied', ['entries', e.id]);
     actions.append(cf);
-    if (e.path) { const cp = el('button', { type: 'button', className: 'btn sm', textContent: 'Copy path' }); cp.onclick = () => copyText(e.path, 'Path copied'); actions.append(cp); }
+    if (e.path) { const cp = el('button', { type: 'button', className: 'btn sm', textContent: 'Copy path' }); cp.onclick = () => copyText(e.path, 'Path copied', ['entries', e.id]); actions.append(cp); }
   }
   actions.append(el('span', { className: 'spacer' }));
   d.append(actions);
@@ -179,16 +215,16 @@ function scopeLabel(e) {
   return 'This repo (commit it)';
 }
 
-function codeBlock(label, text, copyLabel, tall) {
+function codeBlock(label, text, copyLabel, tall, trk) {
   const copy = el('button', { type: 'button', className: 'copy', textContent: copyLabel || 'Copy' });
-  copy.onclick = () => copyText(text, 'Copied');
+  copy.onclick = () => copyText(text, 'Copied', trk);
   return el('div', { className: 'codeblock' + (tall ? ' tall' : '') }, [el('div', { className: 'codeblock-head' }, [el('span', { textContent: label }), copy]), el('pre', { textContent: text })]);
 }
 
 function renderFile(e) {
   const box = el('div', { className: 'panel' });
-  if (isKit(e)) kitFiles(e).forEach(f => box.append(codeBlock(f.path, f.content, 'Copy')));
-  else box.append(codeBlock(fileName(e), e.content || '(no file contents)', 'Copy', true));
+  if (isKit(e)) kitFiles(e).forEach(f => box.append(codeBlock(f.path, f.content, 'Copy', false, ['entries', e.id])));
+  else box.append(codeBlock(fileName(e), e.content || '(no file contents)', 'Copy', true, ['entries', e.id]));
   return box;
 }
 
@@ -402,7 +438,7 @@ function renderInstall(e) {
       el('li', {}, [el('span', {}, ['Paste the command and press ', el('kbd', { textContent: 'Enter' }), '.'])]),
       el('li', {}, [el('span', {}, [el('code', { textContent: 'Added:' }), ' marks new files, ', el('code', { textContent: 'Kept:' }), ' files you already had, ', el('code', { textContent: 'Updated:' }), ' a file that gained one missing line.'])]),
     ]));
-    box.append(codeBlock(shell, buildUpdateCommand(e), 'Copy command'));
+    box.append(codeBlock(shell, buildUpdateCommand(e), 'Copy command', false, ['entries', e.id]));
   } else if (method === 'terminal') {
     const needsRepo = kit ? kitFiles(e).some(f => !/^~|^%USERPROFILE%/.test(f.path)) : !t.global;
     box.append(el('div', { className: 'inst-head' }, [el('h3', { textContent: 'Run in the Kiro terminal' })]));
@@ -411,7 +447,7 @@ function renderInstall(e) {
       el('li', {}, [el('span', {}, ['Paste the command and press ', el('kbd', { textContent: 'Enter' }), '.'])]),
       el('li', {}, [el('span', {}, ['You should see ', el('code', { textContent: 'Installed:' }), ' and the path. A file that was already there is kept as ', el('code', { textContent: '.bak' }), '.'])]),
     ]));
-    box.append(codeBlock(shell, buildCommand(e, t), 'Copy command'));
+    box.append(codeBlock(shell, buildCommand(e, t), 'Copy command', false, ['entries', e.id]));
   } else {
     box.append(el('div', { className: 'inst-head' }, [el('h3', { textContent: 'Do it by hand' })]));
     const ol = el('ol', { className: 'steps' });
@@ -419,7 +455,7 @@ function renderInstall(e) {
       kitFiles(e).forEach(f => {
         const ft = target(e, f.path);
         const cp = el('button', { type: 'button', className: 'btn sm', textContent: 'Copy' });
-        cp.onclick = () => copyText(f.content, 'Copied ' + ft.file);
+        cp.onclick = () => copyText(f.content, 'Copied ' + ft.file, ['entries', e.id]);
         ol.append(el('li', {}, [el('span', { className: 'manual-row' }, ['Save ', el('code', { textContent: ft.file }), ' in ', el('code', { textContent: displayDir(ft) }), cp])]));
       });
     } else if (t) {
@@ -530,7 +566,9 @@ function renderPackages() {
     card.setAttribute('aria-current', String(state.selected === PKG_PREFIX + p.id));
     const parent = p.extends ? pkgById(p.extends) : null;
     card.append(
-      el('div', { className: 'pk-top' }, [levelBars(p.level || 1), el('span', { className: 'pk-count', textContent: `${items.length} ${items.length === 1 ? 'item' : 'items'}` })]),
+      el('div', { className: 'pk-top' }, [levelBars(p.level || 1), el('span', { className: 'card-side' }, [
+        copiesOf(state.metrics, 'packages', p.id) ? el('span', { className: 'copies', textContent: copiesLabel(copiesOf(state.metrics, 'packages', p.id)) }) : null,
+        el('span', { className: 'pk-count', textContent: `${items.length} ${items.length === 1 ? 'item' : 'items'}` })])]),
       el('div', { className: 'pk-name', textContent: p.name || 'Package' }),
       el('p', { className: 'pk-tag', textContent: p.tagline || '' }),
       el('div', { className: 'pk-foot', textContent: parent ? `${parent.name} + ${ownCount} more` : items.slice(0, 4).map(x => (state.entries.find(e => e.id === x.id) || {}).title).filter(Boolean).join(' · ') })
@@ -612,7 +650,7 @@ function renderPackageDrawer(d, p) {
       el('li', {}, [el('span', {}, ['Do the follow-ups below, then type ', el('code', { textContent: '#steering-doctor' }), ' if you have it, to check everything loaded.'])]),
     ]));
     box.append(el('p', { className: 'auto-note', textContent: 'Safe to re-run. Moving up a level later? Run the bigger package’s command: it only adds what’s new.' }));
-    box.append(codeBlock(state.os === 'mac' ? 'Terminal (bash / zsh)' : 'PowerShell', buildPackageCommand(p, entries), 'Copy command'));
+    box.append(codeBlock(state.os === 'mac' ? 'Terminal (bash / zsh)' : 'PowerShell', buildPackageCommand(p, entries), 'Copy command', false, ['packages', p.id]));
     const req = [];
     entries.forEach(e => (e.installSteps || '').split('\n').map(s => s.trim()).filter(s => /^required:/i.test(s)).forEach(s => req.push([e.title, s.replace(/^required:\s*/i, '')])));
     if (req.length) box.append(el('div', { className: 'note req' }, [el('h4', { textContent: 'Required after installing' }), el('ul', {}, req.map(([t, s]) => el('li', {}, [el('b', { textContent: t + ': ' }), ...inlineMd(s)])))]));
@@ -652,7 +690,7 @@ function renderLegend() {
   if (!state.entries.some(e => e.recommended)) return;
   l.append(el('span', { className: 'star' }, [starIcon(14)]), 'Recommended: start with these.');
 }
-function render() { renderPackages(); renderCount(); renderLegend(); renderFilters(); renderGrid(); renderDrawer(); }
+function render() { renderPackages(); renderCount(); renderLegend(); renderFilters(); renderSort(); renderGrid(); renderDrawer(); }
 
 $('search').addEventListener('input', ev => { state.q = ev.target.value; renderGrid(); });
 $('rec-only').checked = state.recOnly;
@@ -662,7 +700,9 @@ window.addEventListener('hashchange', () => { state.selected = location.hash.sli
 /* ---------- read-only data load ---------- */
 async function loadData(banner) {
   try {
+    const metricsReq = fetchMetrics(); // optional: never blocks or breaks the directory
     const [entries, packages] = await Promise.all(['/data/entries.json', '/data/packages.json'].map(p => fetch(p).then(r => { if (!r.ok) throw new Error(p); return r.json(); })));
+    state.metrics = await metricsReq;
     state.entries = (Array.isArray(entries) ? entries : []).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
     state.packages = Array.isArray(packages) ? packages : [];
   } catch {

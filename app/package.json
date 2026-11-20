@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Read-only directory of the team's Kiro steering files, skills and hooks.",
+  "description": "Directory of the team's Kiro steering files, skills and hooks, with copy counts.",
   "engines": { "node": ">=20" },
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "check": "node --check server.js && node --check src/main.js && node --check src/tutorial.js",
+    "check": "node --check server.js && node --check metrics.js && node --check storage.js && node --check src/main.js && node --check src/track.js && node --check src/popular.js && node --check src/tutorial.js",
+    "test": "node --test",
     "sync": "node ../tools/sync_entries.mjs",
     "sync:check": "node ../tools/sync_entries.mjs --check"
   }

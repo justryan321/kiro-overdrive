@@ -13,6 +13,7 @@ Format: `- YYYY-MM-DD | area | what changed (because …) | ref`
 When you finish a change, add one line. Keep it to what changed and why. Don't edit old lines.
 
 ## Entries
+- 2026-11-19 | app | Added copy-count tracking (`POST /api/track`, `GET /api/metrics`, `metrics.json` in a Unity Catalog Volume), a "Most popular" sort and "N copies" badges (because we want to see which entries teammates actually use). Volume path is still a placeholder in `app.yaml` | chat
 - 2026-11-19 | app | Added first-visit tutorial overlay with Skip button and a Tour button to replay it (because new teammates need a quick orientation) | chat
 
 - 2026-11-19 | steering | Added this changes log (because the team wants a running record of changes) | chat

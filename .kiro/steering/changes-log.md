@@ -22,3 +22,4 @@ When you finish a change, add one line. Keep it to what changed and why. Don't e
 - 2026-11-19 | steering | Created decisions-log.md for brain capture | Create decisions-log.md
 - 2026-11-19 | pack | Removed ticket-to-spec from the intermediate package | remove tickets to spec from intermediate package
 - 2026-11-19 | repo | Initial project creation | initial project creation
+- 2026-11-19 | deploy | GHE Pages hosting: relative asset/data paths, iframe-safe copy fallback, `npm run build` writes the site into `docs/` for Pages (main, /docs); removed `npm run deploy`, `tools/deploy_pages.mjs` and `.github/workflows/pages.yml` (because deploys go through GitHub Desktop and there are no Actions runners) | chat

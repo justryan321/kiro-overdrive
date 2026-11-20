@@ -1,0 +1,96 @@
+[
+  {
+    "id": "starter",
+    "name": "Starter",
+    "level": 1,
+    "tagline": "Essential packages",
+    "audience": "Everyone. Install this first, in every repo you work in.",
+    "extends": null,
+    "items": [
+      {
+        "id": "safety-rails",
+        "why": "Always-on rails: the agent asks before anything destructive, touches prod, or posts on your behalf."
+      },
+      {
+        "id": "onboard-me",
+        "why": "A guided tour of any repo, so you know what it does and how to run it before you change it."
+      },
+      {
+        "id": "file-header-on-create",
+        "why": "Every new file the agent creates states its purpose, owner, inputs, outputs and ticket, so your work is easy to follow from day one."
+      },
+      {
+        "id": "standup",
+        "why": "A paste-ready daily standup from your commits, specs and Jira, in under a minute."
+      },
+      {
+        "id": "changelog-docs-kit",
+        "why": "Flags docs your changes made stale, and writes plain-English release notes and a Teams post after a merge."
+      }
+    ],
+    "addons": [
+      {
+        "id": "explain-mode",
+        "why": "Turn it on when you're new to a codebase or to SQL and Python: it explains every change it makes."
+      }
+    ],
+    "updatedAt": 1795120800000
+  },
+  {
+    "id": "intermediate",
+    "name": "Intermediate",
+    "level": 2,
+    "tagline": "Tools for more control, recommended for developers",
+    "audience": "Once you're comfortable in Kiro and own tickets end to end.",
+    "extends": "starter",
+    "items": [
+      {
+        "id": "sql-review-kit",
+        "why": "Catches fan-out joins, NULL traps and date bugs before wrong numbers ship, on demand and on every save."
+      },
+      {
+        "id": "second-brain-kit",
+        "why": "Kiro remembers your projects, conventions and decisions across sessions, so you stop re-explaining the same things."
+      }
+    ],
+    "addons": [
+      {
+        "id": "explain-mode",
+        "why": "Useful when you pick up an unfamiliar repo: it explains every change it makes."
+      }
+    ],
+    "updatedAt": 1795120600001
+  },
+  {
+    "id": "advanced",
+    "name": "Advanced",
+    "level": 3,
+    "tagline": "The full toolkit for leads and power users.",
+    "audience": "For people who own repos, review others' work, or keep shared metrics consistent across the team.",
+    "extends": "intermediate",
+    "items": [
+      {
+        "id": "output-formats",
+        "why": "Team templates for commits, PRs, Jira, Teams and Confluence. Standup, Handoff and Changelog write in these formats."
+      },
+      {
+        "id": "steering-doctor",
+        "why": "Keeps a growing steering setup healthy: conflicts, always-on bloat, stale rules and broken hooks."
+      },
+      {
+        "id": "handoff",
+        "why": "Hand over in-flight work cleanly before PTO or a reassignment, with nothing left only on your machine."
+      },
+      {
+        "id": "metric-align",
+        "why": "Finds every version of a metric across repos, Databricks, Confluence and Excel, and shows where they disagree."
+      },
+      {
+        "id": "future-purge",
+        "why": "Clears out dead files safely, with a 14-day holding period that catches anything still in use."
+      }
+    ],
+    "addons": [],
+    "updatedAt": 1795120800001
+  }
+]

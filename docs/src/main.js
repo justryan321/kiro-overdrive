@@ -32,7 +32,7 @@ const starIcon = (size = 14) => { const ns = 'http://www.w3.org/2000/svg'; const
 const byRec = (a, b) => (b.recommended ? 1 : 0) - (a.recommended ? 1 : 0);
 
 function toast(text) { const t = $('toast'); t.textContent = text; t.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('show'), 1800); }
-// Fallback for iframes (e.g. Confluence) where navigator.clipboard is blocked.
+// Fallback for iframes and browsers where navigator.clipboard is blocked.
 function legacyCopy(text) {
   const ta = document.createElement('textarea');
   ta.value = text;

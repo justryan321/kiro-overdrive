@@ -49,7 +49,10 @@ The app is read-only: it shows `public/data/*.json` and has no Add, Edit or Dele
 
 ## Publish to GitHub Pages
 
-The site is hosted on GHE Pages from the `docs/` folder on `main` (Settings → Pages → Source: "Deploy from a branch", branch `main`, folder `/docs`). The site in `docs/` is a built copy of the app, so **every time you change the app or `pack/`, rebuild before you commit**, otherwise the live site stays on the old version.
+Repo: https://github.com/justryan321/kiro-overdrive
+Live site: https://justryan321.github.io/kiro-overdrive/ (public: anyone with the link can view it)
+
+The site is hosted on GitHub Pages from the `docs/` folder on `main` (Settings → Pages → Source: "Deploy from a branch", branch `main`, folder `/docs`). The site in `docs/` is a built copy of the app, so **every time you change the app or `pack/`, rebuild before you commit**, otherwise the live site stays on the old version.
 
 1. From the `app` folder, run:
 

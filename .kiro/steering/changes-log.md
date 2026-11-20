@@ -23,3 +23,4 @@ When you finish a change, add one line. Keep it to what changed and why. Don't e
 - 2026-11-19 | pack | Removed ticket-to-spec from the intermediate package | remove tickets to spec from intermediate package
 - 2026-11-19 | repo | Initial project creation | initial project creation
 - 2026-11-19 | deploy | GHE Pages hosting: relative asset/data paths, iframe-safe copy fallback, `npm run build` writes the site into `docs/` for Pages (main, /docs); removed `npm run deploy`, `tools/deploy_pages.mjs` and `.github/workflows/pages.yml` (because deploys go through GitHub Desktop and there are no Actions runners) | chat
+- 2026-11-19 | deploy | Repointed hosting from GHE (skx.ghe.com/skechers-dataeng) to personal GitHub (github.com/justryan321/kiro-overdrive, Pages at justryan321.github.io/kiro-overdrive); updated README and project brain; dropped the Confluence page generator (because it's a personal project) | chat

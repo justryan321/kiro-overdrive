@@ -9,7 +9,7 @@ Nothing in this folder installs itself or changes your Kiro setup. It's plain so
 ```
 kiro-overdrive/
 ├─ app/                      the directory web app (Node.js, no dependencies)
-│  ├─ package.json           npm scripts: start, dev, check, sync, sync:check
+│  ├─ package.json           npm scripts: start, dev, check, build, deploy, sync, sync:check
 │  ├─ server.js              read-only server (Node's built-in http module)
 │  ├─ src/
 │  │  ├─ main.js             the app's code (ES module, runs in the browser)
@@ -28,7 +28,9 @@ kiro-overdrive/
 ├─ docs/
 │  └─ MIGRATION.md           rollout guide for teammates
 └─ tools/
-   └─ sync_entries.mjs       copies pack/ file text into app/public/data/entries.json
+   ├─ sync_entries.mjs       copies pack/ file text into app/public/data/entries.json
+   ├─ build_pages.mjs        builds the static site into app/dist/
+   └─ deploy_pages.mjs       builds and pushes app/dist/ to the gh-pages branch
 ```
 
 The pack lives in `pack/`, not `.kiro/`, on purpose. Kiro only loads steering and hooks from a `.kiro/` folder, so working on these files here doesn't change how Kiro behaves in this project.
@@ -44,6 +46,23 @@ npm run dev
 Then open http://localhost:8000 and refresh after edits. `dev` restarts the server when `server.js` changes; files in `src/` and `public/` are read fresh on every request. Use `npm start` to run it without the file watcher, and `npm run check` for a syntax check. Set `PORT` to use a port other than 8000.
 
 The app is read-only: it shows `public/data/*.json` and has no Add, Edit or Delete.
+
+## Publish to GitHub Pages
+
+The site is hosted on GHE Pages from the `gh-pages` branch. There are no Actions runners, so publishing is manual. **Every time you push changes to `main`, run the deploy afterwards**, otherwise the live site stays on the old version.
+
+1. Commit your changes and push them to `main` (`git push`).
+2. From the `app` folder, run:
+
+   ```
+   npm run deploy
+   ```
+
+The deploy refuses to run unless you're on `main` with no uncommitted changes in `app/`, `pack/`, `tools/` or `docs/`. It then runs `check` and `sync:check`, builds `app/dist/` (`npm run build`), and force-pushes `dist/` to `gh-pages`. `gh-pages` only ever holds generated files, so never edit it by hand. Pages takes a minute or so to update; hard-refresh the page to see the change.
+
+If `sync:check` fails, run `npm run sync`, commit, push, and deploy again.
+
+`.github/workflows/pages.yml` does the same thing in Actions, but it is manual-only until the org has a runner.
 
 ## Common changes
 

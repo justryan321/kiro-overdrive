@@ -9,6 +9,8 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "check": "node --check server.js && node --check src/main.js && node --check src/tutorial.js",
+    "build": "node ../tools/build_pages.mjs",
+    "deploy": "node ../tools/deploy_pages.mjs",
     "sync": "node ../tools/sync_entries.mjs",
     "sync:check": "node ../tools/sync_entries.mjs --check"
   }

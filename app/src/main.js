@@ -32,7 +32,20 @@ const starIcon = (size = 14) => { const ns = 'http://www.w3.org/2000/svg'; const
 const byRec = (a, b) => (b.recommended ? 1 : 0) - (a.recommended ? 1 : 0);
 
 function toast(text) { const t = $('toast'); t.textContent = text; t.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('show'), 1800); }
-async function copyText(text, ok) { try { await navigator.clipboard.writeText(text); toast(ok); } catch { toast('Copy was blocked. Select the text and copy it.'); } }
+// Fallback for iframes (e.g. Confluence) where navigator.clipboard is blocked.
+function legacyCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+  document.body.append(ta);
+  ta.select();
+  try { return document.execCommand('copy'); } catch { return false; } finally { ta.remove(); }
+}
+async function copyText(text, ok) {
+  try { await navigator.clipboard.writeText(text); toast(ok); return; } catch {}
+  toast(legacyCopy(text) ? ok : 'Copy was blocked. Select the text and copy it.');
+}
 
 function visible() {
   const q = state.q.trim().toLowerCase();
@@ -662,7 +675,7 @@ window.addEventListener('hashchange', () => { state.selected = location.hash.sli
 /* ---------- read-only data load ---------- */
 async function loadData(banner) {
   try {
-    const [entries, packages] = await Promise.all(['/data/entries.json', '/data/packages.json'].map(p => fetch(p).then(r => { if (!r.ok) throw new Error(p); return r.json(); })));
+    const [entries, packages] = await Promise.all(['data/entries.json', 'data/packages.json'].map(p => fetch(p).then(r => { if (!r.ok) throw new Error(p); return r.json(); })));
     state.entries = (Array.isArray(entries) ? entries : []).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
     state.packages = Array.isArray(packages) ? packages : [];
   } catch {

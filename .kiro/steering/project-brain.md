@@ -14,12 +14,13 @@ The team's Kiro setup: a pack of steering files, skills and hooks, plus a direct
 - Run locally: `npm run dev` (from `app/`), then http://localhost:8000
 - Syntax check: `npm run check`
 - Sync pack text into the app: `npm run sync`; drift check: `npm run sync:check`
+- Publish to GHE Pages: `npm run deploy` (from `app/`, on `main`, after pushing)
 
 ## Layout
 - `app/`: the directory app (`server.js`, `src/` code and styles, `public/` page and data)
 - `pack/`: the Kiro files themselves (steering, skills, hooks, second-brain, install)
 - `docs/`: rollout guide for teammates
-- `tools/`: `sync_entries.mjs`
+- `tools/`: `sync_entries.mjs`, `build_pages.mjs`, `deploy_pages.mjs`
 
 ## Topic files (load with #name)
 | When working on… | Load |
@@ -29,6 +30,7 @@ The team's Kiro setup: a pack of steering files, skills and hooks, plus a direct
 ## Rules
 - When you edit anything under `pack/`, run `npm run sync` (because the app embeds copies of those files).
 - When you change `packages.json`, update `install.sh` and `install.ps1` to match (because the installers must stay in step with it).
+- Whenever changes are committed or pushed to `main`, end the reply with the deploy step: "Run `npm run deploy` from `app/` to publish to Pages" (because there are no Actions runners, so the live site only updates when someone deploys).
 - The directory app is read-only and serves `app/public/data/*.json`; to change what it shows, edit the JSON (or `pack/` then sync) and refresh the page (because there is no database behind it).
 
 ## Brain

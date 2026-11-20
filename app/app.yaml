@@ -1,8 +1,0 @@
-command: ["npm", "run", "start"]
-
-env:
-  # PLACEHOLDER: replace with the real Unity Catalog Volume path once it is approved.
-  # While it contains "<", the app keeps counts in a local file that is lost on redeploy.
-  # The app's service principal needs READ VOLUME and WRITE VOLUME on this Volume.
-  - name: METRICS_VOLUME_PATH
-    value: "/Volumes/<catalog>/<schema>/<volume>/kiro-overdrive/metrics.json"

@@ -84,9 +84,6 @@ code { font-family: var(--mono); font-size: 12.5px; background: var(--subtle); b
 .rec-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: #92400E; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 999px; padding: 1px 8px; }
 .legend { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; margin: 4px 0 0; }
 .card-type { font-size: 12px; color: var(--muted); white-space: nowrap; }
-.card-side { display: inline-flex; align-items: baseline; gap: 8px; flex-shrink: 0; }
-.copies { font-size: 12px; font-variant-numeric: tabular-nums; color: var(--accent-ink); background: var(--accent-soft); border-radius: 999px; padding: 0 8px; white-space: nowrap; }
-.seg[hidden] { display: none; }
 .card p { margin: 0; color: var(--ink-2); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .tags { margin-top: auto; display: flex; gap: 6px; flex-wrap: wrap; }
 .tag { font-size: 12px; background: var(--subtle); border-radius: 4px; padding: 1px 8px; color: var(--ink-2); border: 0; }

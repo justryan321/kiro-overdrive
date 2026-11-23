@@ -13,6 +13,7 @@ Format: `- YYYY-MM-DD | area | what changed (because …) | ref`
 When you finish a change, add one line. Keep it to what changed and why. Don't edit old lines.
 
 ## Entries
+- 2026-11-23 | pack | Added the Databricks Setup kit (`/databricks-setup` skill and a `.sql` save nudge hook) to the Intermediate package, plus installer and README updates (because teammates need a guided Dev Kit install, OAuth sign-in and SQL-from-chat setup) | chat
 - 2026-11-19 | deploy | Removed all Databricks Apps hosting: deleted `app/app.yaml`, the README deploy section and the project-brain app ID/Git deploy details, and dropped `DATABRICKS_APP_PORT` from `server.js` (because the app will only run locally, not on Databricks Apps) | chat
 - 2026-11-19 | app | Removed copy-count tracking, the "Most popular" sort and the "N copies" badges, and the metrics files, tests and docs that went with them (because the team no longer needs download/adoption tracking) | chat
 - 2026-11-19 | app | Added copy-count tracking (`POST /api/track`, `GET /api/metrics`, `metrics.json` in a Unity Catalog Volume), a "Most popular" sort and "N copies" badges (because we want to see which entries teammates actually use). Volume path is still a placeholder in `app.yaml` | chat

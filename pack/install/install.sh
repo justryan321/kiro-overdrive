@@ -38,7 +38,7 @@ esac
 
 L1=(steering/no-surprises.md hooks/destructive-guard.json skills/onboard-me.md hooks/file-header-on-create.json
     skills/standup.md skills/changelog.md hooks/docs-reminder-on-stop.json)
-L2=(skills/sql-review.md hooks/sql-check-on-save.json)
+L2=(skills/sql-review.md hooks/sql-check-on-save.json skills/databricks-setup.md hooks/databricks-setup-nudge.json)
 L3=(steering/output-formats.md skills/steering-doctor.md skills/handoff.md skills/metric-align.md skills/future-purge.md)
 PERSONAL_FILES=(steering/explain-mode.md steering/claude-code-style.md steering/codex-style.md)
 

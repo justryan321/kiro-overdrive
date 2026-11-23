@@ -43,7 +43,7 @@ if ($Package -eq 'all') { $Personal = $true }
 $RepoFiles = @{
   1 = @('steering\no-surprises.md', 'hooks\destructive-guard.json', 'skills\onboard-me.md', 'hooks\file-header-on-create.json',
         'skills\standup.md', 'skills\changelog.md', 'hooks\docs-reminder-on-stop.json')
-  2 = @('skills\sql-review.md', 'hooks\sql-check-on-save.json')
+  2 = @('skills\sql-review.md', 'hooks\sql-check-on-save.json', 'skills\databricks-setup.md', 'hooks\databricks-setup-nudge.json')
   3 = @('steering\output-formats.md', 'skills\steering-doctor.md', 'skills\handoff.md', 'skills\metric-align.md', 'skills\future-purge.md')
 }
 $PersonalFiles = @('steering\explain-mode.md', 'steering\claude-code-style.md', 'steering\codex-style.md')

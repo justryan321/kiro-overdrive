@@ -9,9 +9,9 @@ Packages are cumulative: each one includes everything in the one before it.
 | Package | Adds | Total |
 |---|---|---|
 | `starter` | Guardian (`no-surprises.md` + `destructive-guard.json`), `onboard-me.md`, `file-header-on-create.json`, `standup.md`, Changelog and Docs (`changelog.md` + `docs-reminder-on-stop.json`) | 5 items, 7 files |
-| `intermediate` | SQL Review (`sql-review.md` + `sql-check-on-save.json`), Second Brain | 7 items |
-| `advanced` | `output-formats.md`, `steering-doctor.md`, `handoff.md`, `metric-align.md`, `future-purge.md` | 12 items |
-| `all` (default) | Advanced + personal files: `explain-mode.md`, `claude-code-style.md`, `codex-style.md` | 15 items |
+| `intermediate` | SQL Review (`sql-review.md` + `sql-check-on-save.json`), Second Brain, Databricks Setup (`databricks-setup.md` + `databricks-setup-nudge.json`) | 8 items |
+| `advanced` | `output-formats.md`, `steering-doctor.md`, `handoff.md`, `metric-align.md`, `future-purge.md` | 13 items |
+| `all` (default) | Advanced + personal files: `explain-mode.md`, `claude-code-style.md`, `codex-style.md` | 16 items |
 
 The Kiro Overdrive directory app shows the same packages with a reason for each item, and an install command for each package.
 
@@ -33,6 +33,7 @@ The Kiro Overdrive directory app shows the same packages with a reason for each 
 | `#sql-review` | Correctness-first SQL review with rewrites and read-only verification queries. | none |
 | `#handoff` | State-of-the-work doc before PTO or reassignment. | git; Atlassian MCP optional |
 | `#onboard-me` | Interactive repo tour for new teammates. | none |
+| `/databricks-setup` (or `#databricks-setup`) | Installs the Databricks AI Dev Kit, signs you in with OAuth, connects the Databricks MCP server and runs a test SQL file from chat. Shows every command and waits for your OK. | Databricks workspace access; git; the walkthrough installs the CLI and `uv` if missing |
 | `#changelog` | Merged PRs → plain-English `CHANGELOG.md` section + Teams post. | git; `gh` optional |
 | `#steering-doctor` | Audits steering and hooks for conflicts, bloat and stale references. | none |
 | `#metric-align <metric>` | Finds every definition of a metric across repos, Databricks, Confluence and Excel, and shows where they disagree. | `.kiro/metric-sources.md`; MCPs and `gh` optional |
@@ -43,6 +44,7 @@ The Kiro Overdrive directory app shows the same packages with a reason for each 
 |---|---|---|
 | `hooks/destructive-guard.json` | Pre Tool Use (shell, MCP SQL tools) | Stops before destructive commands or SQL writes and asks you. |
 | `hooks/sql-check-on-save.json` | File save, `*.sql` | Quick high-severity SQL check; silent when clean. |
+| `hooks/databricks-setup-nudge.json` | File save, `*.sql` | If Databricks isn't set up for Kiro, suggests `/databricks-setup`; silent otherwise. |
 | `hooks/file-header-on-create.json` | File create, `*.py`, `*.sql`, `*.ipynb` | Adds the team header (purpose, owner, inputs, outputs, ticket). |
 | `hooks/docs-reminder-on-stop.json` | Agent stop | Flags docs the changes made stale; suggests `#changelog` after a merge. |
 
@@ -82,6 +84,7 @@ Where files go:
 ## Troubleshooting
 - **A hook doesn't appear or never fires.** Trigger names have changed across Kiro versions. These files use `PreToolUse`, `PostFileSave`, `PostFileCreate`, `Stop` and `PostTaskExecution`. If your version rejects one, ask Kiro to "create a hook from `.kiro/hooks/<file>.json`" and it will rewrite it in the format your version expects. `#steering-doctor` flags hook files that don't parse.
 - **The MCP SQL guard never fires.** Its matcher looks for MCP tool IDs containing sql, statement, query or execute. Ask Kiro for your Databricks MCP server's tool names and adjust the `matcher`.
+- **`/databricks-setup` keeps getting suggested.** The hook looks for a profile in `~/.databrickscfg` and a `databricks` server in `.kiro/settings/mcp.json` (project or `~/.kiro/`). Finish `/databricks-setup`, or set the hook's `"enabled": false`.
 - **Too chatty.** Set `"enabled": false` on a hook rather than deleting it.
 - **Custom agents ignore all this.** Add `"resources": ["file://.kiro/steering/**/*.md"]` to the agent config.
 - **Something broke after `#future-purge`.** That file was used after all. Type `#future-purge restore <path>`, and `#future-purge keep <path>` if it should never be flagged again.

@@ -51,6 +51,10 @@
       {
         "id": "second-brain-kit",
         "why": "Kiro remembers your projects, conventions and decisions across sessions, so you stop re-explaining the same things."
+      },
+      {
+        "id": "databricks-setup-kit",
+        "why": "Type /databricks-setup to install the Databricks AI Dev Kit, sign in with OAuth and run SQL from Kiro chat, with your OK on every command."
       }
     ],
     "addons": [

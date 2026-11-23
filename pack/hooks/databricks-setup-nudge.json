@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Databricks setup nudge on SQL save",
+      "description": "When a .sql file is saved and Databricks isn't set up for Kiro yet, suggest /databricks-setup. Silent otherwise.",
+      "trigger": "PostFileSave",
+      "matcher": "\\.sql$",
+      "enabled": true,
+      "action": {
+        "type": "agent",
+        "prompt": "A .sql file was just saved. If you already ran this check in this session, do nothing and say nothing. Otherwise do a read-only check: (1) does ~/.databrickscfg exist and contain at least one [profile] section (read only the section names, never any token or secret), and (2) does .kiro/settings/mcp.json in this workspace or ~/.kiro/settings/mcp.json contain a server named databricks. If both are true, say nothing at all. If either is missing, reply with exactly one line: 'Databricks isn't set up for Kiro yet. Type /databricks-setup to install it and run this SQL from chat.' Do not edit any file, do not run any command beyond reading those two files, and do not run or review the SQL."
+      }
+    }
+  ]
+}

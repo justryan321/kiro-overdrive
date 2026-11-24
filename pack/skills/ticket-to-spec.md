@@ -6,7 +6,7 @@ description: "#ticket-to-spec PROJ-123: turns a Jira issue into a Kiro spec (req
 
 # #ticket-to-spec
 
-Run this when I type `#ticket-to-spec <ISSUE-KEY>`. Needs the Atlassian MCP server. If it isn't connected, ask me to paste the ticket text instead.
+Run this when I type `#ticket-to-spec <ISSUE-KEY>`. Needs the Atlassian MCP server. If it isn't connected, say `/atlassian-setup` connects it, and ask me to paste the ticket text instead.
 
 ## 1. Fetch
 - The issue: summary, description, acceptance criteria, issue type, priority, labels, components, linked issues, and the last 10 comments.

@@ -9,7 +9,7 @@
     "items": [
       {
         "id": "safety-rails",
-        "why": "Always-on rails: the agent asks before anything destructive, touches prod, or posts on your behalf."
+        "why": "Always-on rails: the agent asks before anything destructive, touches prod, or posts on your behalf, and Guardian blocks secrets from reaching files, tickets or commits."
       },
       {
         "id": "file-header-on-create",
@@ -30,7 +30,7 @@
         "why": "Turn it on when you're new to a codebase or to SQL and Python: it explains every change it makes."
       }
     ],
-    "updatedAt": 1795120800000
+    "updatedAt": 1795545623332
   },
   {
     "id": "intermediate",
@@ -51,15 +51,23 @@
       {
         "id": "databricks-setup-kit",
         "why": "Type /databricks-setup to install the Databricks AI Dev Kit, sign in with OAuth and run SQL from Kiro chat, with your OK on every command."
+      },
+      {
+        "id": "atlassian-setup",
+        "why": "Type /atlassian-setup to connect Jira and Confluence with OAuth, so standups, ticket specs and handoffs can read your tickets. Read tools only are auto-approved."
       }
     ],
     "addons": [
       {
         "id": "explain-mode",
         "why": "Useful when you pick up an unfamiliar repo: it explains every change it makes."
+      },
+      {
+        "id": "brief-mode",
+        "why": "For when you know the repo and want speed: answer-first replies, no narration."
       }
     ],
-    "updatedAt": 1795120600001
+    "updatedAt": 1795545623332
   },
   {
     "id": "advanced",
@@ -86,7 +94,12 @@
         "why": "Clears out dead files safely, with a 14-day holding period that catches anything still in use."
       }
     ],
-    "addons": [],
-    "updatedAt": 1795120800001
+    "addons": [
+      {
+        "id": "brief-mode",
+        "why": "Short, answer-first replies for people who review a lot of changes. Safety confirmations stay complete."
+      }
+    ],
+    "updatedAt": 1795545623332
   }
 ]

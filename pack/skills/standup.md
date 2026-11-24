@@ -37,5 +37,5 @@ Use this format:
 
 ## 4. Deliver
 - Print the standup in a code block so I can paste it into Teams.
-- Below it, one line: what you couldn't see (for example "No Jira: Atlassian MCP not connected").
+- Below it, one line: what you couldn't see (for example "No Jira: Atlassian MCP not connected. Type /atlassian-setup to connect it").
 - Don't post anywhere. Don't change any file.

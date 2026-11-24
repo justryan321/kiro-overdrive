@@ -6,6 +6,7 @@
 |---|---|---|---|
 | `no-surprises.md` | always | repo | Hard safety rails. Beats every other steering file. |
 | `explain-mode.md` | `#explain-mode` | personal | Teaching mode: plan and why before each change, plain English after. |
+| `brief-mode.md` | `#brief-mode` | personal | Speed mode: answer first, short replies. Safety confirmations stay complete. |
 
 ## Notes
 - Workspace steering (`<repo>/.kiro/steering/`) wins over global steering (`~/.kiro/steering/`) if they conflict.

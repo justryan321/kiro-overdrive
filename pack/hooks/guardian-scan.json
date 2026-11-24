@@ -1,0 +1,57 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Guardian scan: before every tool call",
+      "description": "Hard block (exit 2) on secrets in any tool input, reading secret files, catastrophic or hook-bypassing shell commands, and commits or pushes that carry secrets.",
+      "trigger": "PreToolUse",
+      "matcher": ".*",
+      "enabled": true,
+      "action": {
+        "type": "command",
+        "command": "python3 .kiro/scripts/guardian.py pre"
+      }
+    },
+    {
+      "name": "Guardian scan: after every tool call",
+      "description": "Reports likely secrets in files the tool touched or in its output, so the agent stops and tells you.",
+      "trigger": "PostToolUse",
+      "matcher": ".*",
+      "enabled": true,
+      "action": {
+        "type": "command",
+        "command": "python3 .kiro/scripts/guardian.py post"
+      }
+    },
+    {
+      "name": "Guardian scan: end of turn",
+      "description": "When the agent finishes, scans uncommitted changes and new files for secrets and secret files.",
+      "trigger": "Stop",
+      "enabled": true,
+      "action": {
+        "type": "command",
+        "command": "python3 .kiro/scripts/guardian.py changes"
+      }
+    },
+    {
+      "name": "Guardian scan: after each spec task",
+      "description": "After a spec task finishes, scans uncommitted changes and new files for secrets.",
+      "trigger": "PostTaskExecution",
+      "enabled": true,
+      "action": {
+        "type": "command",
+        "command": "python3 .kiro/scripts/guardian.py changes"
+      }
+    },
+    {
+      "name": "Guardian: commit scan check",
+      "description": "At the start of a session, one line if this clone's git pre-commit secret scan isn't installed yet. Silent otherwise.",
+      "trigger": "SessionStart",
+      "enabled": true,
+      "action": {
+        "type": "command",
+        "command": "python3 .kiro/scripts/guardian.py session"
+      }
+    }
+  ]
+}

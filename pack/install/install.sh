@@ -13,7 +13,7 @@ set -euo pipefail
 
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 GLOBAL_KIRO="$HOME/.kiro"
-REPO="" PACKAGE="all" PERSONAL=0 FORCE=0 DRY=0
+REPO="" PACKAGE="all" PERSONAL=0 FORCE=0 DRY=0 GITHOOK=1
 COPIED=0 SKIPPED=0
 
 usage() { sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'; exit 1; }
@@ -25,6 +25,7 @@ while [[ $# -gt 0 ]]; do
     --personal) PERSONAL=1; shift ;;
     --force) FORCE=1; shift ;;
     --dry-run) DRY=1; shift ;;
+    --no-git-hook) GITHOOK=0; shift ;;
     -h|--help) usage ;;
     *) echo "Unknown option: $1"; usage ;;
   esac
@@ -36,11 +37,12 @@ case "$PACKAGE" in
   *) echo "--package must be starter, intermediate, advanced or all"; exit 1 ;;
 esac
 
-L1=(steering/no-surprises.md hooks/destructive-guard.json hooks/file-header-on-create.json
-    skills/standup.md skills/changelog.md hooks/docs-reminder-on-stop.json)
-L2=(skills/sql-review.md hooks/sql-check-on-save.json skills/databricks-setup.md hooks/databricks-setup-nudge.json)
+L1=(steering/no-surprises.md hooks/destructive-guard.json hooks/guardian-scan.json scripts/guardian.py
+    hooks/file-header-on-create.json skills/standup.md skills/changelog.md hooks/docs-reminder-on-stop.json)
+L2=(skills/sql-review.md hooks/sql-check-on-save.json skills/databricks-setup.md hooks/databricks-setup-nudge.json
+    skills/atlassian-setup.md)
 L3=(skills/steering-doctor.md skills/handoff.md skills/metric-align.md skills/future-purge.md)
-PERSONAL_FILES=(steering/explain-mode.md)
+PERSONAL_FILES=(steering/explain-mode.md steering/brief-mode.md)
 
 is_protected() { case "$1" in project-brain.md|decisions-log.md|brain-index.md) return 0 ;; *) return 1 ;; esac; }
 
@@ -66,12 +68,32 @@ REPO_KIRO="$(cd "$REPO" && pwd)/.kiro"
 [[ $DRY -eq 1 ]] && echo "DRY RUN: nothing will be written." && echo
 
 rel=("${L1[@]}"); (( LEVEL >= 2 )) && rel+=("${L2[@]}"); (( LEVEL >= 3 )) && rel+=("${L3[@]}")
-steer=() hks=()
-for r in "${rel[@]}"; do if [[ "$r" == hooks/* ]]; then hks+=("$SRC/$r"); else steer+=("$SRC/$r"); fi; done
+steer=() hks=() scr=()
+for r in "${rel[@]}"; do
+  case "$r" in hooks/*) hks+=("$SRC/$r") ;; scripts/*) scr+=("$SRC/$r") ;; *) steer+=("$SRC/$r") ;; esac
+done
 
 echo "${PACKAGE^} package -> $REPO_KIRO"
 copy_pack "$REPO_KIRO/steering" "${steer[@]}"
 copy_pack "$REPO_KIRO/hooks" "${hks[@]}"
+copy_pack "$REPO_KIRO/scripts" "${scr[@]}"
+
+# Guardian's git pre-commit secret scan (also covers commits from GitHub Desktop).
+echo; echo "Guardian commit scan -> $REPO/.git/hooks/pre-commit"
+PY=""
+for c in python3 python; do
+  if command -v "$c" >/dev/null 2>&1 && "$c" -c "import sys; sys.exit(0 if sys.version_info >= (3, 8) else 1)" >/dev/null 2>&1; then PY="$c"; break; fi
+done
+if [[ -z "$PY" ]]; then
+  echo "  warn   Python 3.8+ not found. Guardian's hooks and commit scan need it: install Python 3, then run"
+  echo "         python3 .kiro/scripts/guardian.py install-git-hook   (from the repo root)"
+elif [[ $GITHOOK -eq 0 ]]; then
+  echo "  skip   --no-git-hook given"
+elif [[ $DRY -eq 1 ]]; then
+  echo "  would run: $PY .kiro/scripts/guardian.py install-git-hook"
+else
+  (cd "$REPO" && "$PY" "$REPO_KIRO/scripts/guardian.py" install-git-hook) | sed 's/^/  /'
+fi
 
 if (( LEVEL >= 2 )); then
   echo; echo "Second brain -> $REPO_KIRO and $GLOBAL_KIRO"
@@ -94,5 +116,6 @@ echo "Next:"
 echo "  1. Open the repo in Kiro and check the Hooks panel lists the new hooks, all turned on."
 (( LEVEL >= 2 )) && echo "  2. In a new chat, type #brain-setup to fill in your brain."
 (( LEVEL >= 3 )) && echo "  3. Type #steering-doctor to check everything loaded cleanly."
+echo "  Teammates who clone the repo run 'python3 .kiro/scripts/guardian.py install-git-hook' once (Kiro reminds them)."
 echo "  4. Commit .kiro/ in the repo so the whole team gets the pack. Your global files stay personal."
 exit 0

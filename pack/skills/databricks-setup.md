@@ -28,7 +28,7 @@ If a `databricks` MCP entry and a working profile already exist, say so and ask:
 ## 2. Install the prerequisites I'm missing
 Only for what step 1 found missing or too old. Show the command, wait for yes.
 - **Databricks CLI:** macOS/Linux `brew install databricks`, or the install script from https://docs.databricks.com/dev-tools/cli/install.html. Windows `winget install Databricks.DatabricksCLI`. Upgrade: `brew upgrade databricks`.
-- **uv:** macOS/Linux `curl -LsSf https://astral.sh/uv/install.sh | sh`; Windows `powershell -c "irm https://astral.sh/uv/install.ps1 | iex"`. Offer to download the script first and show it.
+- **uv:** download the installer to a file first, show its first lines, then run the file after my yes. macOS/Linux: `curl -LsSf https://astral.sh/uv/install.sh -o /tmp/uv-install.sh`, then `sh /tmp/uv-install.sh`. Windows: `irm https://astral.sh/uv/install.ps1 -OutFile uv-install.ps1`, then `powershell -ExecutionPolicy Bypass -File .\uv-install.ps1`. Never pipe a download into a shell; Guardian blocks it.
 - **git:** point me to https://git-scm.com/downloads. Don't install it for me.
 
 Then re-run the version checks.

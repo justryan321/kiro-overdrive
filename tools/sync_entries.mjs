@@ -28,7 +28,7 @@ function indexPack() {
     const rel = path.relative(PACK, p).split(path.sep);
     const ext = path.extname(p);
     const base = path.basename(p);
-    if (rel.includes('install') || !['.md', '.json'].includes(ext) || base === 'README.md') continue;
+    if (rel.includes('install') || !['.md', '.json', '.py'].includes(ext) || base === 'README.md') continue;
     if (found.has(base)) console.log(`warning: two files named ${base}: ${found.get(base)} and ${p}`);
     found.set(base, p);
   }

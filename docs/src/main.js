@@ -315,8 +315,17 @@ function displayDir(t) {
   if (state.os === 'win') return (t.global ? '%USERPROFILE%\\' : '') + rel + '\\';
   return (t.global ? '~/' : '') + rel + '/';
 }
+// Windows has no python3 command, so Guardian's hooks call python there.
+function osContent(content, t) {
+  const c = (content || '').replace(/\r\n/g, '\n').replace(/\n*$/, '\n');
+  return state.os === 'win' && t && t.file === 'guardian-scan.json' ? c.replace(/"python3 /g, '"python ') : c;
+}
+function postInstall(e) {
+  const cmd = e && e.postInstall && e.postInstall[state.os === 'mac' ? 'mac' : 'win'];
+  return cmd ? ['', cmt(`${e.title}: one more step`), cmd] : [];
+}
 function fileBlock(content, t) {
-  const body = (content || '').replace(/\r\n/g, '\n').replace(/\n*$/, '\n');
+  const body = osContent(content, t);
   if (state.os === 'mac') {
     const dir = (t.global ? '"$HOME/' : '"') + t.dirParts.join('/') + '"';
     let eof = 'KIRO_EOF'; while (body.includes(eof)) eof += '_';
@@ -345,7 +354,7 @@ function cmt(text) { return state.os === 'mac' ? ': ' + shq(text) : '# ' + text;
 function shq(x) { return "'" + String(x).replace(/'/g, "'\\''") + "'"; }
 function psq(x) { return "'" + String(x).replace(/'/g, "''") + "'"; }
 function updateBlock(content, t) {
-  const body = (content || '').replace(/\r\n/g, '\n').replace(/\n*$/, '\n');
+  const body = osContent(content, t);
   if (state.os === 'mac') {
     const dir = (t.global ? '"$HOME/' : '"') + t.dirParts.join('/') + '"';
     let eof = 'KIRO_EOF'; while (body.includes(eof)) eof += '_';
@@ -392,6 +401,7 @@ function buildUpdateCommand(e) {
   const lines = [cmt(`${e.title}: update. Adds missing files only; your existing files are kept as they are.`)];
   kitFiles(e).forEach(f => lines.push('', cmt(f.path), updateBlock(f.content, target(e, f.path))));
   (Array.isArray(e.updatePatches) ? e.updatePatches : []).forEach(p => { if (p && p.path && p.after && p.line) lines.push('', cmt(`add a missing line to ${p.path}`), patchBlock(p, target(e, p.path))); });
+  lines.push(...postInstall(e));
   return lines.join('\n');
 }
 function buildCommand(e, t) {
@@ -400,6 +410,7 @@ function buildCommand(e, t) {
   const needsRepo = files.some(f => !/^~|^%USERPROFILE%/.test(f.path));
   const lines = [cmt(`${e.title}: installs ${files.length} files${needsRepo ? '. Run from your repo’s root folder.' : '.'}`)];
   files.forEach(f => lines.push('', cmt(f.path), fileBlock(f.content, target(e, f.path))));
+  lines.push(...postInstall(e));
   return lines.join('\n');
 }
 function seg(options, value, onPick, label, cls) {
@@ -601,6 +612,7 @@ function buildPackageCommand(p, entries) {
       if (t) lines.push('', cmt(e.title), updateBlock(e.content, t));
     }
   });
+  entries.forEach(e => lines.push(...postInstall(e)));
   return lines.join('\n');
 }
 

@@ -164,6 +164,8 @@ function renderDrawer() {
   fact('Scope', scopeLabel(e));
   fact('Updated', e.updatedAt ? new Date(e.updatedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '');
   if (facts.childElementCount) d.append(facts);
+  const pre = renderPrereqs(e);
+  if (pre) d.append(pre);
 
   const tabs = el('div', { className: 'tabs', role: 'tablist' });
   tabs.setAttribute('aria-label', 'Entry views');
@@ -222,6 +224,25 @@ function treeFor(path) {
   });
   if (home) pre.append(el('span', { className: 'note', textContent: '\nApplies to every project on this machine.' }));
   return pre;
+}
+
+function renderPrereqs(e) {
+  const list = (Array.isArray(e.prereqs) ? e.prereqs : []).filter(p => p && p.name);
+  if (!list.length) return null;
+  const nReq = list.filter(p => p.need === 'required').length;
+  const head = el('div', { className: 'prereq-head' }, [
+    el('h4', { textContent: 'Prerequisites' }),
+    el('span', { className: 'prereq-count', textContent: nReq ? `${nReq} required` + (list.length > nReq ? `, ${list.length - nReq} optional` : '') : 'All optional' })
+  ]);
+  const rows = list.map(p => {
+    const req = p.need === 'required';
+    const kids = [el('div', { className: 'prereq-name' }, [el('span', {}, inlineMd(p.name)), el('span', { className: 'prereq-pill ' + (req ? 'req' : 'opt'), textContent: req ? 'Required' : 'Optional' })])];
+    if (p.why) kids.push(el('p', { className: 'prereq-why' }, inlineMd(p.why)));
+    const target = p.link && state.entries.find(x => x.id === p.link);
+    if (target) { const b = el('button', { type: 'button', className: 'prereq-link', textContent: 'Set it up with ' + target.title + ' →' }); b.onclick = () => { state.tab = 'overview'; select(target.id); }; kids.push(b); }
+    return el('li', { className: 'prereq' + (req ? ' is-req' : '') }, kids);
+  });
+  return el('section', { className: 'prereqs', ariaLabel: 'Prerequisites' }, [head, el('ul', {}, rows)]);
 }
 
 function loadInfo(e) {

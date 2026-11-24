@@ -12,6 +12,13 @@
     ],
     "inclusion": "manual  (#future-purge)",
     "summary": "Finds files nobody uses, parks them in future_purge/ for 14 days, restores anything that turns out to be used, and deletes what expired, only after you approve.",
+    "prereqs": [
+      {
+        "name": "git",
+        "need": "required",
+        "why": "Parks, restores and deletes with `git mv` and `git rm` so history is kept."
+      }
+    ],
     "installSteps": "Commit it in the repo so the whole team can run it and restore parked files.\nRun it weekly; a Friday wrap-up is a good slot.\nIt moves files with `git mv` and deletes with `git rm`, on a `chore/future-purge-YYYY-MM-DD` branch, so history is kept. Untracked files can't be recovered once deleted, so it asks about each one separately.\nAdd anything that must never be flagged to `future_purge/KEEP.md`.\nParking is meant to surface hidden use: if a job or import breaks naming a parked file, run `#future-purge restore <path>`.",
     "testSteps": "In a repo with an obviously dead file (for example `scratch_old.ipynb` with no commits in 30+ days), type `#future-purge`.\nPass: a health line, then numbered Delete / Restore / Park sections with a confidence level and reason for each candidate, and nothing moved until you approve.\nApprove one park. Check that the file moved under `future_purge/` with the same path and that `MANIFEST.md` has a row expiring in 14 days.\nType `#future-purge restore <path>`. Pass: the file is back where it was and the row says restored.",
     "examplePrompt": " ",
@@ -35,6 +42,34 @@
     ],
     "inclusion": "manual  (#metric-align)",
     "summary": "Finds every place a metric is calculated across repos, Databricks, Confluence and Excel, breaks each definition down, and shows where they disagree and by how much. Read-only.",
+    "prereqs": [
+      {
+        "name": "`.kiro/metric-sources.md`",
+        "need": "required",
+        "why": "Lists the repos, catalogs, Confluence spaces and Excel folders to search. It offers to create this on first run."
+      },
+      {
+        "name": "Databricks MCP server",
+        "need": "optional",
+        "why": "Searches view definitions and notebooks.",
+        "link": "databricks-setup-kit"
+      },
+      {
+        "name": "Atlassian MCP server",
+        "need": "optional",
+        "why": "Searches Confluence pages."
+      },
+      {
+        "name": "GitHub CLI (`gh`), signed in",
+        "need": "optional",
+        "why": "Org-wide code search."
+      },
+      {
+        "name": "Python with `openpyxl`",
+        "need": "optional",
+        "why": "Reads formulas in Excel workbooks."
+      }
+    ],
     "installSteps": "Required: Create `.kiro/metric-sources.md` listing your repos, Databricks catalogs, Confluence spaces and Excel folders. On first run it offers to create this file from a template.\nEach source needs its tool: the Databricks MCP for views, the Atlassian MCP for Confluence, the GitHub CLI (`gh`) for org-wide code search, and Python with `openpyxl` for Excel formulas. It skips any source it can't reach and says so.\nThe gap query runs only if you say yes, using aggregates against dev or read-only access.",
     "testSteps": "Pick a metric you suspect is calculated differently in two places (for example MAPE).\nIn a new Kiro chat, type `#metric-align MAPE`.\nIt should show its search terms (names, aliases and formula shapes) and ask for team synonyms before searching.\nPass: a health line with counts, one comparison matrix with differing cells highlighted, each location classed as Identical, Equivalent, Divergent or Different metric, and a proposed canonical definition. Nothing is edited or posted, and the gap query waits for your yes.",
     "examplePrompt": "MAPE",
@@ -126,6 +161,18 @@
     ],
     "inclusion": "Installs 2 files into the repo: `changelog.md`, which you run with `#changelog`, and `docs-reminder-on-stop.json`, a hook that names stale docs when the agent finishes and suggests `#changelog` after a merge.",
     "summary": "Keeps docs and release notes current: a hook flags docs your changes made stale, and `#changelog` turns merged PRs into a plain-English CHANGELOG section and a Teams post.",
+    "prereqs": [
+      {
+        "name": "git",
+        "need": "required",
+        "why": "`#changelog` reads merged work from git history."
+      },
+      {
+        "name": "GitHub CLI (`gh`), signed in",
+        "need": "optional",
+        "why": "Reads PR descriptions for richer entries."
+      }
+    ],
     "installSteps": "Required: Check **Docs and contract reminder** appears in the Kiro Hooks panel and is on.\n`#changelog` works from git alone. With the GitHub CLI (`gh`) signed in, it also reads PR descriptions for richer entries.\nNeither part edits or posts on its own: the hook only reminds, and `#changelog` shows the diff before writing `CHANGELOG.md` and never posts to Teams.\nIf the reminder ever repeats itself, set its `\"enabled\": false` and tell `#steering-doctor`.",
     "testSteps": "Ask the agent to add a column to a table's DDL. When it finishes, it should name the docs that may now be stale and ask.\nAsk it something that changes no files (\"explain this function\"). It should say nothing extra.\nAfter merging a PR, type `#changelog` in a new chat.\nPass: the reminder fires only after real changes, and `#changelog` proposes a dated Added / Changed / Fixed / Data section, puts anything that moved historical numbers under Data with **Heads up:**, waits for your OK, then drafts a Teams update.",
     "examplePrompt": "",
@@ -202,6 +249,18 @@
     ],
     "inclusion": "manual  (#handoff)",
     "summary": "Before PTO or reassignment, writes a state-of-the-work doc from branches, unpushed work, specs, TODOs, running jobs and Jira, plus a short interview.",
+    "prereqs": [
+      {
+        "name": "git",
+        "need": "required",
+        "why": "Finds unmerged branches, unpushed commits and uncommitted changes."
+      },
+      {
+        "name": "Atlassian MCP server",
+        "need": "optional",
+        "why": "Adds your open Jira issues and their last comment."
+      }
+    ],
     "installSteps": "It asks before creating `docs/handoff/` and never commits, posts or pushes on its own.",
     "testSteps": "In a repo with an open branch, type `#handoff for <name>, back <date>`.\nAnswer its interview questions.\nPass: the doc has TL;DR, Work in flight, Don't touch, Running while I'm away, Who to ask and How to pick it up, and it lists any uncommitted or unpushed work as at risk.",
     "examplePrompt": "for Priya, back Dec 2",
@@ -224,6 +283,13 @@
     ],
     "inclusion": "manual  (#ticket-to-spec)",
     "summary": "Turns a Jira issue into a Kiro spec (requirements, design, tasks), with every requirement traced to an acceptance criterion and every gap asked about first.",
+    "prereqs": [
+      {
+        "name": "Atlassian MCP server",
+        "need": "required",
+        "why": "Reads the Jira issue and its acceptance criteria. Without it, paste the ticket text into the chat instead."
+      }
+    ],
     "installSteps": "Required: Connect the Atlassian MCP server in Kiro so it can read Jira. Without it, paste the ticket text into the chat instead.\nIt only comments back on the Jira issue if you say yes, and shows you the comment first.",
     "testSteps": "Pick a real Jira issue with acceptance criteria. In a new Kiro chat type `#ticket-to-spec PROJ-123`.\nIt should list gaps, assumptions and conflicts, and ask numbered questions if needed.\nAfter you answer, check `.kiro/specs/proj-123-<slug>/`.\nPass: requirements are in EARS form and tagged `(AC n)` or `(assumed: confirm)`, every requirement appears in at least one task, and nothing was posted to Jira.",
     "examplePrompt": "PROJ-219",
@@ -246,6 +312,18 @@
     ],
     "inclusion": "manual  (#standup)",
     "summary": "Drafts a three-line standup from your commits, the decisions log, spec progress and open Jira tickets, ready to paste into Teams.",
+    "prereqs": [
+      {
+        "name": "git",
+        "need": "required",
+        "why": "Yesterday’s items come from your commits."
+      },
+      {
+        "name": "Atlassian MCP server",
+        "need": "optional",
+        "why": "Adds your open Jira issues. Without it, the standup says Jira was skipped."
+      }
+    ],
     "installSteps": "Jira items need the Atlassian MCP server. Without it, the standup still works from git and specs and says Jira was skipped.\nIt never posts anything; you paste it yourself.",
     "testSteps": "In a repo where you committed yesterday, open a new Kiro chat and type `#standup`.\nPass: three lines (Yesterday, Today, Blockers) in a code block, commits grouped into outcomes rather than listed, ticket keys in parentheses, and one line saying anything it couldn't see.",
     "examplePrompt": " ",
@@ -364,6 +442,23 @@
     ],
     "inclusion": "Installs 2 files into the repo: `databricks-setup.md`, the walkthrough you start with `/databricks-setup`, and `databricks-setup-nudge.json`, a hook that suggests it when you save a .sql file and Databricks isn't set up yet.",
     "summary": "Type `/databricks-setup` and Kiro installs the Databricks AI Dev Kit, signs you in with OAuth, connects the Databricks MCP server and runs a test SQL file from chat. Every command is shown and needs your OK first.",
+    "prereqs": [
+      {
+        "name": "Databricks workspace access",
+        "need": "required",
+        "why": "Your workspace URL and access to a SQL warehouse. Ask a workspace admin if you don’t have one."
+      },
+      {
+        "name": "git",
+        "need": "required",
+        "why": "Clones the Databricks MCP server."
+      },
+      {
+        "name": "Databricks CLI v1.0.0+ and `uv`",
+        "need": "optional",
+        "why": "Needed, but the walkthrough installs them for you if missing, after you approve."
+      }
+    ],
     "installSteps": "Required: Check **Databricks setup nudge on SQL save** appears in the Kiro Hooks panel and is on.\nBefore you start you need `git` and your workspace URL. The walkthrough installs the Databricks CLI (v1.0.0+) and `uv` for you if they're missing, after you approve each command.\nSign-in is OAuth in your browser. Never paste a token into chat; the walkthrough never asks for one.\nThe MCP server is cloned to a folder on your machine (default `~/.databricks-mcp/ai-dev-kit`) and must stay there. Each teammate runs `/databricks-setup` once on their own machine.\nThe hook fires on the agent's saves, not on SQL you type yourself. You can always type `/databricks-setup` directly.\nToo chatty? Set the hook's `\"enabled\": false`; `/databricks-setup` keeps working.",
     "testSteps": "On a machine or repo with no `databricks` entry in `.kiro/settings/mcp.json`, ask the agent to create `sql/test.sql` with `SELECT 1`.\nThe hook should suggest `/databricks-setup`.\nType `/databricks-setup` in a new chat and approve each step.\nPass: the preflight table shows your CLI, profiles and MCP status; every install command is shown first; the browser opens for login; `.kiro/settings/mcp.json` gets a `databricks` entry; and `sql/databricks_smoke_test.sql` runs with a result table in chat. Saving a .sql file afterwards produces no nudge.",
     "examplePrompt": "/databricks-setup",

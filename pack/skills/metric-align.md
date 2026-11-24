@@ -84,5 +84,5 @@ Report the gap as absolute and relative ("MAPE 18.2% vs 21.7%; 3.5 points, mostl
 
 ## 7. Follow-ups (only on my yes, one at a time)
 - Write or update `metrics/<metric>.md` in this repo with the canonical definition, its owners, and the list of known locations.
-- Draft (don't post) a Jira ticket or Teams message for each divergent owner, using `output-formats.md`.
+- Draft (don't post) a Jira ticket or Teams message for each divergent owner: short and skimmable, with the metric, where the versions disagree, and what you're asking them to do.
 - Add a decision entry to `decisions-log.md` if we picked a canonical version.

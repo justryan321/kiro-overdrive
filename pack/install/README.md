@@ -8,10 +8,10 @@ Packages are cumulative: each one includes everything in the one before it.
 
 | Package | Adds | Total |
 |---|---|---|
-| `starter` | Guardian (`no-surprises.md` + `destructive-guard.json`), `onboard-me.md`, `file-header-on-create.json`, `standup.md`, Changelog and Docs (`changelog.md` + `docs-reminder-on-stop.json`) | 5 items, 7 files |
-| `intermediate` | SQL Review (`sql-review.md` + `sql-check-on-save.json`), Second Brain, Databricks Setup (`databricks-setup.md` + `databricks-setup-nudge.json`) | 8 items |
-| `advanced` | `output-formats.md`, `steering-doctor.md`, `handoff.md`, `metric-align.md`, `future-purge.md` | 13 items |
-| `all` (default) | Advanced + personal files: `explain-mode.md`, `claude-code-style.md`, `codex-style.md` | 16 items |
+| `starter` | Guardian (`no-surprises.md` + `destructive-guard.json`), `file-header-on-create.json`, `standup.md`, Changelog and Docs (`changelog.md` + `docs-reminder-on-stop.json`) | 4 items, 6 files |
+| `intermediate` | SQL Review (`sql-review.md` + `sql-check-on-save.json`), Second Brain, Databricks Setup (`databricks-setup.md` + `databricks-setup-nudge.json`) | 7 items |
+| `advanced` | `steering-doctor.md`, `handoff.md`, `metric-align.md`, `future-purge.md` | 11 items |
+| `all` (default) | Advanced + personal file: `explain-mode.md` | 12 items |
 
 The Kiro Overdrive directory app shows the same packages with a reason for each item, and an install command for each package.
 
@@ -21,9 +21,7 @@ The Kiro Overdrive directory app shows the same packages with a reason for each 
 | File | Loads | What it does |
 |---|---|---|
 | `steering/no-surprises.md` | always | Hard safety rails: no destructive SQL, file, git or prod actions, no secrets, nothing posted without a yes. Beats every other file. |
-| `steering/output-formats.md` | `#output-formats` | Paste-ready templates: commits, PRs, Jira comments, Teams updates, Confluence pages, standups, Excel. |
 | `steering/explain-mode.md` | `#explain-mode` | Teaching mode: plan and why before each change, plain-English explanation after. Personal. |
-| `steering/claude-code-style.md`, `codex-style.md` | manual | Agent personalities. Personal; load one at a time. |
 
 ### Skills (type `#name` in chat)
 | Skill | What it does | Needs |
@@ -32,7 +30,6 @@ The Kiro Overdrive directory app shows the same packages with a reason for each 
 | `#ticket-to-spec PROJ-123` | Jira issue → Kiro spec, each requirement traced to an acceptance criterion. | Atlassian MCP |
 | `#sql-review` | Correctness-first SQL review with rewrites and read-only verification queries. | none |
 | `#handoff` | State-of-the-work doc before PTO or reassignment. | git; Atlassian MCP optional |
-| `#onboard-me` | Interactive repo tour for new teammates. | none |
 | `/databricks-setup` (or `#databricks-setup`) | Installs the Databricks AI Dev Kit, signs you in with OAuth, connects the Databricks MCP server and runs a test SQL file from chat. Shows every command and waits for your OK. | Databricks workspace access; git; the walkthrough installs the CLI and `uv` if missing |
 | `#changelog` | Merged PRs → plain-English `CHANGELOG.md` section + Teams post. | git; `gh` optional |
 | `#steering-doctor` | Audits steering and hooks for conflicts, bloat and stale references. | none |
@@ -74,7 +71,7 @@ Where files go:
 1. Open the repo in Kiro and check that the Hooks panel lists the new hooks.
 2. From Intermediate up, type `#brain-setup` in a new chat.
 3. Type `#steering-doctor` once to confirm everything parsed and nothing conflicts.
-4. Commit `<repo>/.kiro/` so teammates get the pack on their next pull. New teammates then just type `#onboard-me`.
+4. Commit `<repo>/.kiro/` so teammates get the pack on their next pull.
 5. Optional: type `#metric-align` once to create `.kiro/metric-sources.md` (the repos, catalogs, Confluence spaces and Excel folders it searches), and commit it.
 
 ## Routines

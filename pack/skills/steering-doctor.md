@@ -22,7 +22,7 @@ Make a table: file, scope (workspace / global), inclusion (`always` / `manual` /
 - Custom agent configs missing `"resources": ["file://.kiro/steering/**/*.md"]`.
 
 **Conflicts**
-- Two `always` files that contradict each other (for example `claude-code-style` and `codex-style` both set to `always`).
+- Two `always` files that contradict each other (for example two files setting opposite rules for when to ask before acting).
 - A workspace file and a global file with the same name or rule but different content (workspace wins: tell me which global line is shadowed).
 - Rules that contradict `no-surprises.md`. `no-surprises.md` always wins.
 

@@ -36,11 +36,11 @@ case "$PACKAGE" in
   *) echo "--package must be starter, intermediate, advanced or all"; exit 1 ;;
 esac
 
-L1=(steering/no-surprises.md hooks/destructive-guard.json skills/onboard-me.md hooks/file-header-on-create.json
+L1=(steering/no-surprises.md hooks/destructive-guard.json hooks/file-header-on-create.json
     skills/standup.md skills/changelog.md hooks/docs-reminder-on-stop.json)
 L2=(skills/sql-review.md hooks/sql-check-on-save.json skills/databricks-setup.md hooks/databricks-setup-nudge.json)
-L3=(steering/output-formats.md skills/steering-doctor.md skills/handoff.md skills/metric-align.md skills/future-purge.md)
-PERSONAL_FILES=(steering/explain-mode.md steering/claude-code-style.md steering/codex-style.md)
+L3=(skills/steering-doctor.md skills/handoff.md skills/metric-align.md skills/future-purge.md)
+PERSONAL_FILES=(steering/explain-mode.md)
 
 is_protected() { case "$1" in project-brain.md|decisions-log.md|brain-index.md) return 0 ;; *) return 1 ;; esac; }
 
@@ -93,7 +93,6 @@ echo; if [[ $DRY -eq 1 ]]; then echo "Done: $COPIED would be copied, $SKIPPED sk
 echo "Next:"
 echo "  1. Open the repo in Kiro and check the Hooks panel lists the new hooks, all turned on."
 (( LEVEL >= 2 )) && echo "  2. In a new chat, type #brain-setup to fill in your brain."
-echo "  3. Type #onboard-me for a tour of the repo."
-(( LEVEL >= 3 )) && echo "  4. Type #steering-doctor to check everything loaded cleanly."
-echo "  5. Commit .kiro/ in the repo so the whole team gets the pack. Your global files stay personal."
+(( LEVEL >= 3 )) && echo "  3. Type #steering-doctor to check everything loaded cleanly."
+echo "  4. Commit .kiro/ in the repo so the whole team gets the pack. Your global files stay personal."
 exit 0

@@ -12,10 +12,6 @@
         "why": "Always-on rails: the agent asks before anything destructive, touches prod, or posts on your behalf."
       },
       {
-        "id": "onboard-me",
-        "why": "A guided tour of any repo, so you know what it does and how to run it before you change it."
-      },
-      {
         "id": "file-header-on-create",
         "why": "Every new file the agent creates states its purpose, owner, inputs, outputs and ticket, so your work is easy to follow from day one."
       },
@@ -73,10 +69,6 @@
     "audience": "For people who own repos, review others' work, or keep shared metrics consistent across the team.",
     "extends": "intermediate",
     "items": [
-      {
-        "id": "output-formats",
-        "why": "Team templates for commits, PRs, Jira, Teams and Confluence. Standup, Handoff and Changelog write in these formats."
-      },
       {
         "id": "steering-doctor",
         "why": "Keeps a growing steering setup healthy: conflicts, always-on bloat, stale rules and broken hooks."

@@ -17,10 +17,10 @@ kiro-overdrive/
 │  └─ public/
 │     ├─ index.html          the page shell
 │     └─ data/
-│        ├─ entries.json     the 16 directory entries, with every file's text embedded
+│        ├─ entries.json     the 13 directory entries, with every file's text embedded
 │        └─ packages.json    Starter / Intermediate / Advanced
 ├─ pack/                     the Kiro files themselves
-│  ├─ steering/              rules: no-surprises, output-formats, explain-mode, agent styles
+│  ├─ steering/              rules: no-surprises, explain-mode
 │  ├─ skills/                #commands: standup, sql-review, ticket-to-spec, handoff, …
 │  ├─ hooks/                 automatic checks
 │  ├─ second-brain/          memory system (global brain + repo brain)

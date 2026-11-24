@@ -12,10 +12,10 @@ const CATEGORIES = [
 const catOf = id => CATEGORIES.find(c => c.id === id) || { id: 'other', label: 'Other', plural: 'Other' };
 const PURPOSES = [
   { id: 'safety', label: 'Safety', desc: 'Guardrails that stop destructive or risky actions before they happen.' },
-  { id: 'style', label: 'Agent Style', desc: 'How the agent works and talks: personalities, teaching mode and role packs.' },
+  { id: 'style', label: 'Agent Style', desc: 'How the agent works and talks, such as teaching mode.' },
   { id: 'plan', label: 'Plan & build', desc: 'Turn tickets into specs and keep new code consistent from the first line.' },
   { id: 'quality', label: 'Quality & review', desc: 'Catch wrong numbers, stale docs and broken setup before anyone else does.' },
-  { id: 'comms', label: 'Team Updates', desc: 'Standups, handoffs, changelogs and paste-ready formats for Jira, Teams and Confluence.' },
+  { id: 'comms', label: 'Team Updates', desc: 'Standups, handoffs and changelogs, ready to paste into Jira, Teams and Confluence.' },
   { id: 'onboard', label: 'Onboarding & memory', desc: 'Get new teammates productive fast and keep what the team learns.' },
 ];
 const OTHER_PURPOSE = { id: 'other', label: 'Other', desc: 'Entries that don’t have a purpose yet.' };

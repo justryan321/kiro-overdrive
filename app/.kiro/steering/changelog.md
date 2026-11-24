@@ -13,7 +13,7 @@ Run this when I type `#changelog`, ideally right after a merge or at the end of 
 - List merged work since then, using the first option that works:
   1. `gh pr list --state merged --search "merged:>=YYYY-MM-DD" --json number,title,body,author,mergedAt,labels --limit 100`
   2. `git log <default-branch> --first-parent --merges --since="YYYY-MM-DD" --pretty="%h %ad %s%n%b" --date=short`
-- For each item, read the PR body (or merge commit body) for the "What", "Why" and "Data impact" sections from `output-formats.md`.
+- For each item, read the PR body (or merge commit body) for the "What", "Why" and "Data impact" sections, if it has them.
 
 ## 2. Write the section
 [Keep a Changelog](https://keepachangelog.com) style, newest on top:
@@ -38,4 +38,10 @@ Rules:
 
 ## 3. Deliver
 - Show the diff to `CHANGELOG.md` and wait for my OK before writing it.
-- Then draft a **Teams update** (format in `output-formats.md`): the top three changes and any **Heads up** items. Show it in a code block for pasting. Don't post it.
+- Then draft a **Teams update**: the top three changes and any **Heads up** items. Show it in a code block for pasting. Don't post it. Teams chat supports only light formatting, so use bold labels and short lines, no headers or tables:
+  ```
+  **<Topic>** — <one-line summary>
+  • <point>
+  • <point>
+  **Need:** <ask, or "nothing, FYI">
+  ```

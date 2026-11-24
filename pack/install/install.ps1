@@ -14,7 +14,7 @@
 .NOTES
   Packages are cumulative: intermediate includes starter, advanced includes intermediate.
   Intermediate and up include the second brain (repo brain + your global brain).
-  "all" = advanced + personal files (explain-mode and the two agent styles).
+  "all" = advanced + personal files (explain-mode).
   Existing files are skipped unless -Force. Files that hold your notes
   (project-brain.md, decisions-log.md, brain-index.md) are never overwritten.
 #>
@@ -41,12 +41,12 @@ if ($Package -eq 'all') { $Personal = $true }
 
 # Repo files per level (paths relative to the pack root)
 $RepoFiles = @{
-  1 = @('steering\no-surprises.md', 'hooks\destructive-guard.json', 'skills\onboard-me.md', 'hooks\file-header-on-create.json',
+  1 = @('steering\no-surprises.md', 'hooks\destructive-guard.json', 'hooks\file-header-on-create.json',
         'skills\standup.md', 'skills\changelog.md', 'hooks\docs-reminder-on-stop.json')
   2 = @('skills\sql-review.md', 'hooks\sql-check-on-save.json', 'skills\databricks-setup.md', 'hooks\databricks-setup-nudge.json')
-  3 = @('steering\output-formats.md', 'skills\steering-doctor.md', 'skills\handoff.md', 'skills\metric-align.md', 'skills\future-purge.md')
+  3 = @('skills\steering-doctor.md', 'skills\handoff.md', 'skills\metric-align.md', 'skills\future-purge.md')
 }
-$PersonalFiles = @('steering\explain-mode.md', 'steering\claude-code-style.md', 'steering\codex-style.md')
+$PersonalFiles = @('steering\explain-mode.md')
 
 function Get-Files([string]$Dir, [string]$Filter) {
   $p = Join-Path $Src $Dir
@@ -94,7 +94,7 @@ if ($Level -ge 2) {
   Copy-Pack -Files (Get-Files 'second-brain\global\steering' '*.md') -Dest (Join-Path $GlobalKiro 'steering')
 }
 
-# --- Personal files (explain-mode, agent styles) ---------------------------
+# --- Personal files (explain-mode) ----------------------------------------
 if ($Personal) {
   Write-Host "`nPersonal files -> $GlobalKiro"
   Copy-Pack -Files ($PersonalFiles | ForEach-Object { Join-Path $Src $_ }) -Dest (Join-Path $GlobalKiro 'steering')
@@ -104,6 +104,5 @@ Write-Host "`nDone: $script:copied $(if ($DryRun) { 'would be copied' } else { '
 Write-Host 'Next:'
 Write-Host '  1. Open the repo in Kiro and check the Hooks panel lists the new hooks, all turned on.'
 if ($Level -ge 2) { Write-Host '  2. In a new chat, type #brain-setup to fill in your brain.' }
-Write-Host '  3. Type #onboard-me for a tour of the repo.'
-if ($Level -ge 3) { Write-Host '  4. Type #steering-doctor to check everything loaded cleanly.' }
-Write-Host '  5. Commit .kiro/ in the repo so the whole team gets the pack. Your global files stay personal.'
+if ($Level -ge 3) { Write-Host '  3. Type #steering-doctor to check everything loaded cleanly.' }
+Write-Host '  4. Commit .kiro/ in the repo so the whole team gets the pack. Your global files stay personal.'

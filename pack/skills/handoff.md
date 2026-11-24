@@ -43,4 +43,4 @@ Exact commands to get the branch running and the checks green.
 
 ## 4. Hand back
 - Show me the doc and the list of anything uncommitted or unpushed: work that's only on my machine is at risk.
-- Offer: commit it on a branch; a Confluence version (**Confluence page** format); a short Teams note (**Teams update** format). Do none of them without my yes.
+- Offer: commit it on a branch; a Confluence version; a short Teams note (bold labels and short lines, no headers or tables). Do none of them without my yes.

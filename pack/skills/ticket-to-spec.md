@@ -41,4 +41,11 @@ Folder: `.kiro/specs/<issue-key-lowercase>-<short-slug>/`. If it already exists,
 
 ## 4. Hand back
 - A three-line summary: requirement count, task count, open assumptions.
-- Offer, don't do: "Want me to post a Jira comment linking this spec?" If I say yes, use the **Jira comment** format from `output-formats.md` and show it to me before posting.
+- Offer, don't do: "Want me to post a Jira comment linking this spec?" If I say yes, use this format and show it to me before posting:
+  ```
+  Status: <In progress | Blocked | Ready for review | Done>
+  Done: <1–3 bullets>
+  Next: <1–2 bullets>
+  Blockers: <none, or who/what is needed>
+  Links: <PR, notebook, dashboard>
+  ```

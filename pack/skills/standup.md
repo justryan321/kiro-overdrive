@@ -24,7 +24,12 @@ Run this when I type `#standup`. Target: under a minute, read-only.
   If no Atlassian MCP server is connected, skip this, and say so in one line at the end.
 
 ## 3. Write
-Use the **Standup** format from `output-formats.md`:
+Use this format:
+```
+**Yesterday:** <1–3 items, outcome-focused>
+**Today:** <1–3 items>
+**Blockers:** <none, or specific ask + who>
+```
 - **Yesterday:** outcomes, not activity. Group related commits into one item ("Finished MAPE rollup for DC forecasts (PROJ-212)"), not a list of commit messages.
 - **Today:** the next tasks from open specs and the top in-progress Jira issues.
 - **Blockers:** only real ones: a ticket in a Blocked status, a failing check you saw, or something waiting on a named person. Otherwise "None".

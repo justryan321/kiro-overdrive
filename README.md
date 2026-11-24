@@ -17,10 +17,10 @@ kiro-overdrive/
 │  └─ public/
 │     ├─ index.html          the page shell
 │     └─ data/
-│        ├─ entries.json     the 16 directory entries, with every file's text embedded
+│        ├─ entries.json     the 13 directory entries, with every file's text embedded
 │        └─ packages.json    Starter / Intermediate / Advanced
 ├─ pack/                     the Kiro files themselves
-│  ├─ steering/              rules: no-surprises, output-formats, explain-mode, agent styles
+│  ├─ steering/              rules: no-surprises, explain-mode
 │  ├─ skills/                #commands: standup, sql-review, ticket-to-spec, handoff, …
 │  ├─ hooks/                 automatic checks
 │  ├─ second-brain/          memory system (global brain + repo brain)
@@ -93,6 +93,7 @@ Run `npm run sync:check` to see whether the app's copies have fallen behind `pac
 | `path`, `content` | Single-file entries: where it installs and its text |
 | `files`, `scope: "kit"` | Kits: several `{path, content}` files installed together |
 | `inclusion` | When Kiro loads it (`always`, `manual  (#name)`) or the hook trigger |
+| `prereqs` | Optional list of `{name, need, why, link}` shown as the Prerequisites tile in the detail panel. `need` is `required` or `optional`; `link` is an entry id to set it up with |
 | `installSteps` | One note per line; lines starting `Required:` become the must-do checklist |
 | `testSteps` | One step per line; a line starting `Pass:` is the success check |
 | `examplePrompt`, `exampleReply` | The example chat on the Overview tab |

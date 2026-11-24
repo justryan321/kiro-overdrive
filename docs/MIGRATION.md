@@ -10,7 +10,7 @@ pack/
 │  ├─ install.ps1          Windows installer
 │  ├─ install.sh           macOS / Linux installer
 │  └─ README.md            reference: every file, flag and troubleshooting tip
-├─ steering/               rules (no-surprises, output-formats, explain-mode, agent styles)
+├─ steering/               rules (no-surprises, explain-mode)
 ├─ skills/                 #commands (standup, sql-review, ticket-to-spec, handoff, …)
 ├─ hooks/                  automatic checks (destructive guard, SQL check, file header, docs reminder)
 └─ second-brain/           memory: your global brain + a brain per repo
@@ -36,10 +36,10 @@ Pick a package. Each one includes the one before it, so you can start small and 
 
 | Package | What you get | Best for |
 |---|---|---|
-| `starter` | Guardian (safety rules + destructive guard), Onboard Me, Standard File Header, Standup, Changelog and Docs | Your first week in Kiro |
+| `starter` | Guardian (safety rules + destructive guard), Standard File Header, Standup, Changelog and Docs | Your first week in Kiro |
 | `intermediate` | Starter + SQL Review, Ticket to Spec, Second Brain | Shipping SQL and working Jira tickets weekly |
-| `advanced` | Intermediate + Output Formats, Steering Doctor, Handoff, Metric Align, Future Purge | Leads and power users |
-| `all` (default) | Advanced + your personal files: Explain Mode and both agent styles | Migrating everything at once |
+| `advanced` | Intermediate + Steering Doctor, Handoff, Metric Align, Future Purge | Leads and power users |
+| `all` (default) | Advanced + your personal file: Explain Mode | Migrating everything at once |
 
 From the project root, run:
 
@@ -67,14 +67,13 @@ Open the repo in Kiro and work through these in a new chat:
 
 - [ ] **Check the hooks.** Open the Kiro Hooks panel. You should see the destructive guards, the docs reminder and the file header hook, plus the SQL check and Brain capture from Intermediate up. Turn on any that are off.
 - [ ] **`#brain-setup`** (Intermediate and up). It reads the repo for the stack, commands and layout, then asks you the rest: your role, working style, active projects, and rules that already matter here.
-- [ ] **`#onboard-me`**. A guided tour of the repo. Even in a repo you know, it shows what Kiro understood and catches gaps in the README.
 - [ ] **`#steering-doctor`** (Advanced). Confirms every file loaded, flags conflicts, and catches any hook trigger your Kiro version doesn't recognise.
 
 ## Step 4: Bring your existing knowledge across
 
 Most of the value is in what you already know about your work. Move it in deliberately, rather than all at once:
 
-- **Existing `AGENTS.md` files:** keep them. Kiro reads them automatically, and the Codex style respects them.
+- **Existing `AGENTS.md` files:** keep them. Kiro reads them automatically.
 - **Personal conventions you repeat in every project** (naming, SQL style, how you like answers): put them in your global brain during `#brain-setup`, or say "add to my global brain" in any chat.
 - **Repo-specific rules** ("use the curated view, not staging", "fiscal weeks start Sunday"): tell Kiro once, then run `#brain-capture` at the end of the chat. `#brain-review` turns the good ones into rules.
 - **Metric definitions** that live in Confluence or Excel: run `#metric-align <metric>` once per key metric to find every version and agree on a canonical one.
@@ -98,7 +97,7 @@ Most of the value is in what you already know about your work. Move it in delibe
 
 - Commit the repo's `.kiro/` folder so everyone gets the same rules, skills and hooks on their next pull. Your global files (`~/.kiro/steering/`) stay personal.
 - Review changes to `.kiro/` in pull requests like code. `#brain-review` and `#steering-doctor` already put their changes on a branch.
-- New teammates: clone, open in Kiro, type `#onboard-me`.
+- New teammates: clone and open in Kiro; the committed `.kiro/` gives them the same setup.
 
 ## Per-repo checklist
 
@@ -107,7 +106,6 @@ Copy this into each repo's migration ticket:
 - [ ] Installer run (package: ______)
 - [ ] Hooks visible and on in the Kiro Hooks panel
 - [ ] `#brain-setup` done, no `<placeholders>` left
-- [ ] `#onboard-me` run, README gaps noted
 - [ ] `#steering-doctor` clean
 - [ ] Key metrics checked with `#metric-align`
 - [ ] `.kiro/` committed and pushed

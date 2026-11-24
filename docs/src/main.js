@@ -12,10 +12,10 @@ const CATEGORIES = [
 const catOf = id => CATEGORIES.find(c => c.id === id) || { id: 'other', label: 'Other', plural: 'Other' };
 const PURPOSES = [
   { id: 'safety', label: 'Safety', desc: 'Guardrails that stop destructive or risky actions before they happen.' },
-  { id: 'style', label: 'Agent Style', desc: 'How the agent works and talks: personalities, teaching mode and role packs.' },
+  { id: 'style', label: 'Agent Style', desc: 'How the agent works and talks, such as teaching mode.' },
   { id: 'plan', label: 'Plan & build', desc: 'Turn tickets into specs and keep new code consistent from the first line.' },
   { id: 'quality', label: 'Quality & review', desc: 'Catch wrong numbers, stale docs and broken setup before anyone else does.' },
-  { id: 'comms', label: 'Team Updates', desc: 'Standups, handoffs, changelogs and paste-ready formats for Jira, Teams and Confluence.' },
+  { id: 'comms', label: 'Team Updates', desc: 'Standups, handoffs and changelogs, ready to paste into Jira, Teams and Confluence.' },
   { id: 'onboard', label: 'Onboarding & memory', desc: 'Get new teammates productive fast and keep what the team learns.' },
 ];
 const OTHER_PURPOSE = { id: 'other', label: 'Other', desc: 'Entries that don’t have a purpose yet.' };
@@ -164,6 +164,8 @@ function renderDrawer() {
   fact('Scope', scopeLabel(e));
   fact('Updated', e.updatedAt ? new Date(e.updatedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '');
   if (facts.childElementCount) d.append(facts);
+  const pre = renderPrereqs(e);
+  if (pre) d.append(pre);
 
   const tabs = el('div', { className: 'tabs', role: 'tablist' });
   tabs.setAttribute('aria-label', 'Entry views');
@@ -222,6 +224,25 @@ function treeFor(path) {
   });
   if (home) pre.append(el('span', { className: 'note', textContent: '\nApplies to every project on this machine.' }));
   return pre;
+}
+
+function renderPrereqs(e) {
+  const list = (Array.isArray(e.prereqs) ? e.prereqs : []).filter(p => p && p.name);
+  if (!list.length) return null;
+  const nReq = list.filter(p => p.need === 'required').length;
+  const head = el('div', { className: 'prereq-head' }, [
+    el('h4', { textContent: 'Prerequisites' }),
+    el('span', { className: 'prereq-count', textContent: nReq ? `${nReq} required` + (list.length > nReq ? `, ${list.length - nReq} optional` : '') : 'All optional' })
+  ]);
+  const rows = list.map(p => {
+    const req = p.need === 'required';
+    const kids = [el('div', { className: 'prereq-name' }, [el('span', {}, inlineMd(p.name)), el('span', { className: 'prereq-pill ' + (req ? 'req' : 'opt'), textContent: req ? 'Required' : 'Optional' })])];
+    if (p.why) kids.push(el('p', { className: 'prereq-why' }, inlineMd(p.why)));
+    const target = p.link && state.entries.find(x => x.id === p.link);
+    if (target) { const b = el('button', { type: 'button', className: 'prereq-link', textContent: 'Set it up with ' + target.title + ' →' }); b.onclick = () => { state.tab = 'overview'; select(target.id); }; kids.push(b); }
+    return el('li', { className: 'prereq' + (req ? ' is-req' : '') }, kids);
+  });
+  return el('section', { className: 'prereqs', ariaLabel: 'Prerequisites' }, [head, el('ul', {}, rows)]);
 }
 
 function loadInfo(e) {

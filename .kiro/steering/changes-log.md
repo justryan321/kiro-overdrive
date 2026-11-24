@@ -13,6 +13,7 @@ Format: `- YYYY-MM-DD | area | what changed (because …) | ref`
 When you finish a change, add one line. Keep it to what changed and why. Don't edit old lines.
 
 ## Entries
+- 2026-11-24 | app | Removed the Recommended star from Explain Mode, Steering Doctor, Databricks Setup, Atlassian Setup, SQL Review and Standard File Header; Guardian, Changelog and Docs, and Second Brain stay recommended (because the team asked to narrow the recommended set) | chat
 - 2026-11-24 | pack | Guardian now hard-blocks: added `scripts/guardian.py` (Python 3.8+, no packages) and `guardian-scan.json` hooks (PreToolUse and PostToolUse on all tools, Stop, PostTaskExecution, SessionStart), plus a git pre-commit secret scan the installers add. Blocks secrets in any tool input, opening secret files, catastrophic or hook-skipping shell commands, and commits/pushes with secrets. Added "Guardian scanner" and "Untrusted content" sections to `no-surprises.md` (because agent-type hooks can't block a tool call, and secrets had no commit-time check) | chat
 - 2026-11-24 | pack | Added Atlassian Setup (`/atlassian-setup`, Intermediate): Rovo MCP v2 with OAuth in the user-level `mcp.json`, read-only test, read tools only in autoApprove; skills that need Jira now point to it (because four skills needed Atlassian MCP and nothing explained how to connect it) | chat
 - 2026-11-24 | pack | Added Brief Mode (`#brief-mode`), a personal steering file in `all` and an add-on for Intermediate and Advanced (because power users wanted short, answer-first replies) | chat
